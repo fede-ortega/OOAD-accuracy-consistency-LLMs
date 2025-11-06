@@ -1,0 +1,13 @@
+**/.DS_Store
+
+
+
+# General caches
+.cache/
+*.cache
+*.log
+
+
+
+
+.vscode/
