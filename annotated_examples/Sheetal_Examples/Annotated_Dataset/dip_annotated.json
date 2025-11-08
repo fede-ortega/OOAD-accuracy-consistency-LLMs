@@ -6,38 +6,10 @@
       "level": "EASY",
       "language": "JAVA",
       "violation": "DIP",
-      "human_evaluation": {
-        "violation_case": {
-          "explanation": "This Java example violates the Dependency Inversion Principle because EmailService depends directly on the concrete MySQLDatabase class instead of an abstraction, making it tightly coupled to one database type.",
-          "adherence_score": 2,
-          "violation_severity": 4,
-          "violated_principles": ["DIP"],
-          "rationale": {
-            "reasoning_process": "In the original design, EmailService creates a MySQLDatabase instance internally, which binds the high-level email logic to a low-level persistence detail. This prevents substituting other database implementations without modifying EmailService. Such direct instantiation reduces flexibility and testability, violating the abstraction-based dependency rule that DIP promotes.",
-            "design_analysis": "High-level module depends on a concrete class instead of an interface or abstract contract.",
-            "score_explanation": {
-              "adherence_score": "Low (2) – strong concrete dependency with no abstraction boundary.",
-              "violation_severity": "High (4) – any change in the database class propagates to business logic.",
-              "violated_principles": "DIP violated – modules must depend on abstractions, not concretions."
-            }
-          }
-        },
-        "refactored_case": {
-          "explanation": "The refactored design introduces a Database interface so EmailService now depends on the abstraction, allowing easy substitution of any database implementation.",
-          "adherence_score": 5,
-          "violation_severity": 1,
-          "violated_principles": [],
-          "rationale": {
-            "reasoning_process": "By defining Database as an interface and injecting it into EmailService via the constructor, the design inverts the dependency direction. The service no longer controls database creation and can operate with any class implementing Database. This approach decouples layers, simplifies testing, and aligns perfectly with DIP’s core intent.",
-            "design_analysis": "Constructor-based dependency injection through abstractions restores modularity and independence.",
-            "score_explanation": {
-              "adherence_score": "High (5) – pure abstraction-driven design achieved.",
-              "violation_severity": "Minimal (1) – no concrete dependency remains.",
-              "violated_principles": "None."
-            }
-          }
-        }
-      }
+      "explanation": "This Java example violates the Dependency Inversion Principle because EmailService depends directly on the concrete MySQLDatabase class instead of an abstraction, making it tightly coupled to one database type.",
+      "adherence score": 2,
+      "violation severity": 4
+
     },
     {
       "input": "class MySQLDatabase:\n    def connect(self):\n        print(\"Connected to MySQL\")\n    \n    def get_user_email(self, user_id):\n        return f\"user{user_id}@example.com\"\n\nclass EmailService:\n    def **init**(self):\n        self.database = MySQLDatabase()\n    \n    def send_email(self, user_id, message):\n        self.database.connect()\n        email = self.database.get_user_email(user_id)\n        print(f\"Sending email to {email}: {message}\")",
@@ -45,38 +17,10 @@
       "level": "EASY",
       "language": "PYTHON",
       "violation": "DIP",
-      "human_evaluation": {
-        "violation_case": {
-          "explanation": "This Python version breaks the Dependency Inversion Principle by hard-coding EmailService to instantiate MySQLDatabase, coupling high-level behavior to one database implementation.",
-          "adherence_score": 2,
-          "violation_severity": 4,
-          "violated_principles": ["DIP"],
-          "rationale": {
-            "reasoning_process": "EmailService directly constructs MySQLDatabase within its initializer, binding its logic to that concrete class. This violates DIP because the module responsible for sending emails should depend on a stable abstraction rather than on a specific database detail. The result is limited flexibility—if a new database type is introduced, EmailService must change too.",
-            "design_analysis": "High-level module depends on a low-level class rather than an abstract interface hierarchy.",
-            "score_explanation": {
-              "adherence_score": "Low (2) – tight coupling prevents polymorphic substitution.",
-              "violation_severity": "High (4) – any database change forces service refactoring.",
-              "violated_principles": "DIP violated – dependencies should point toward abstractions."
-            }
-          }
-        },
-        "refactored_case": {
-          "explanation": "The refactored code introduces an abstract Database base class and injects it into EmailService, achieving true dependency inversion and easier extension.",
-          "adherence_score": 5,
-          "violation_severity": 1,
-          "violated_principles": [],
-          "rationale": {
-            "reasoning_process": "Defining Database as an ABC separates interface from implementation. EmailService now receives a Database instance externally, enabling use of mocks, test doubles, or alternative database types. This inversion aligns with Python’s duck-typed flexibility while fully honoring DIP’s abstraction-oriented dependency structure.",
-            "design_analysis": "Loose coupling via dependency injection enhances extensibility and testability.",
-            "score_explanation": {
-              "adherence_score": "High (5) – dependencies inverted to abstractions.",
-              "violation_severity": "Minimal (1) – no concrete coupling.",
-              "violated_principles": "None."
-            }
-          }
-        }
-      }
+               "explanation": "This Python version breaks the Dependency Inversion Principle by hard-coding EmailService to instantiate MySQLDatabase, coupling high-level behavior to one database implementation.",
+          "adherence score": 2,
+          "violation severity": 4
+
     },
  {
       "input": "public class MySQLDatabase {\n    private String connectionString;\n    private boolean isConnected;\n    \n    public MySQLDatabase(String connectionString) {\n        this.connectionString = connectionString;\n        this.isConnected = false;\n    }\n    \n    public void connect() {\n        if (!isConnected) {\n            System.out.println(\"Connecting to MySQL with: \" + connectionString);\n            isConnected = true;\n        }\n    }\n    \n    public void disconnect() {\n        if (isConnected) {\n            System.out.println(\"Disconnecting from MySQL\");\n            isConnected = false;\n        }\n    }\n    \n    public String getUserEmail(int userId) {\n        if (!isConnected) {\n            throw new RuntimeException(\"Database not connected\");\n        }\n        return \"user\" + userId + \"@company.com\";\n    }\n    \n    public boolean validateUser(int userId) {\n        if (!isConnected) {\n            throw new RuntimeException(\"Database not connected\");\n        }\n        return userId > 0 && userId < 10000;\n    }\n}\n\npublic class EmailService {\n    private MySQLDatabase database;\n    private String smtpServer;\n    \n    public EmailService(String smtpServer) {\n        this.smtpServer = smtpServer;\n        this.database = new MySQLDatabase(\"jdbc:mysql://localhost:3306/users\");\n    }\n    \n    public void sendEmail(int userId, String subject, String message) {\n        database.connect();\n        \n        if (!database.validateUser(userId)) {\n            System.out.println(\"Invalid user ID: \" + userId);\n            return;\n        }\n        \n        String email = database.getUserEmail(userId);\n        System.out.println(\"Using SMTP server: \" + smtpServer);\n        System.out.println(\"Sending email to \" + email);\n        System.out.println(\"Subject: \" + subject);\n        System.out.println(\"Message: \" + message);\n        \n        database.disconnect();\n    }\n    \n    public void sendBulkEmails(int[] userIds, String subject, String message) {\n        database.connect();\n        \n        for (int userId : userIds) {\n            if (database.validateUser(userId)) {\n                String email = database.getUserEmail(userId);\n                System.out.println(\"Bulk email sent to: \" + email);\n            }\n        }\n        \n        database.disconnect();\n    }\n}",
@@ -84,38 +28,10 @@
       "level": "MODERATE",
       "language": "JAVA",
       "violation": "DIP",
-      "human_evaluation": {
-        "violation_case": {
-          "explanation": "This Java design violates the Dependency Inversion Principle because EmailService depends directly on the MySQLDatabase class and controls its lifecycle, making the service tightly bound to a specific data layer.",
-          "adherence_score": 1,
-          "violation_severity": 5,
-          "violated_principles": ["DIP"],
-          "rationale": {
-            "reasoning_process": "EmailService creates its own MySQLDatabase internally and invokes its methods directly, coupling the business logic to low-level database mechanics. This dependency direction prevents reuse or testing with different database types. Changing the persistence layer (for example to PostgreSQL or mock storage) would require modifying EmailService itself, defeating DIP’s goal of stability through abstractions.",
-            "design_analysis": "High-level component depends on a mutable implementation detail, preventing abstraction-driven extension.",
-            "score_explanation": {
-              "adherence_score": "Very low (1) – all control and construction depend on a single concrete class.",
-              "violation_severity": "Critical (5) – ripple effects across layers whenever persistence logic changes.",
-              "violated_principles": "DIP violated – abstraction layer missing between business and data modules."
-            }
-          }
-        },
-        "refactored_case": {
-          "explanation": "The refactored version introduces a Database interface and injects it through EmailService’s constructor, reversing the dependency direction and enabling interchangeable implementations.",
-          "adherence_score": 5,
-          "violation_severity": 1,
-          "violated_principles": [],
-          "rationale": {
-            "reasoning_process": "With an abstract Database contract and dependency injection, EmailService now depends on a stable interface rather than a volatile class. This allows substituting MySQL, Oracle, or mock databases without changing the service. The design becomes flexible, unit-testable, and fully compliant with the Dependency Inversion Principle.",
-            "design_analysis": "Layer decoupling ensures high-level modules depend only on abstractions, not concrete details.",
-            "score_explanation": {
-              "adherence_score": "High (5) – inversion fully realized.",
-              "violation_severity": "Minimal (1) – abstraction isolates volatility.",
-              "violated_principles": "None."
-            }
-          }
-        }
-      }
+      "explanation": "This Java design violates the Dependency Inversion Principle because EmailService depends directly on the MySQLDatabase class and controls its lifecycle, making the service tightly bound to a specific data layer.",
+      "adherence score": 1,
+      "violation severity": 5
+
     },
     {
       "input": "class MySQLDatabase:\n    def **init**(self, connection_string):\n        self.connection_string = connection_string\n        self.is_connected = False\n    \n    def connect(self):\n        if not self.is_connected:\n            print(f\"Connecting to MySQL with: {self.connection_string}\")\n            self.is_connected = True\n    \n    def disconnect(self):\n        if self.is_connected:\n            print(\"Disconnecting from MySQL\")\n            self.is_connected = False\n    \n    def get_user_email(self, user_id):\n        if not self.is_connected:\n            raise RuntimeError(\"Database not connected\")\n        return f\"user{user_id}@company.com\"\n    \n    def validate_user(self, user_id):\n        if not self.is_connected:\n            raise RuntimeError(\"Database not connected\")\n        return user_id > 0 and user_id < 10000\n\nclass EmailService:\n    def **init**(self, smtp_server):\n        self.smtp_server = smtp_server\n        self.database = MySQLDatabase(\"mysql://localhost:3306/users\")\n    \n    def send_email(self, user_id, subject, message):\n        self.database.connect()\n        \n        if not self.database.validate_user(user_id):\n            print(f\"Invalid user ID: {user_id}\")\n            return\n        \n        email = self.database.get_user_email(user_id)\n        print(f\"Using SMTP server: {self.smtp_server}\")\n        print(f\"Sending email to {email}\")\n        print(f\"Subject: {subject}\")\n        print(f\"Message: {message}\")\n        \n        self.database.disconnect()\n    \n    def send_bulk_emails(self, user_ids, subject, message):\n        self.database.connect()\n        \n        for user_id in user_ids:\n            if self.database.validate_user(user_id):\n                email = self.database.get_user_email(user_id)\n                print(f\"Bulk email sent to: {email}\")\n        \n        self.database.disconnect()",
@@ -123,38 +39,10 @@
       "level": "MODERATE",
       "language": "PYTHON",
       "violation": "DIP",
-      "human_evaluation": {
-        "violation_case": {
-          "explanation": "This Python example breaks the Dependency Inversion Principle because EmailService constructs a concrete MySQLDatabase internally, creating rigid coupling between layers.",
-          "adherence_score": 2,
-          "violation_severity": 4,
-          "violated_principles": ["DIP"],
-          "rationale": {
-            "reasoning_process": "The EmailService’s constructor directly initializes MySQLDatabase, making the service responsible for both high-level logic and low-level data management. This dependency chain hinders substitution and testing. Without inversion, any change in database configuration forces a rewrite in EmailService, indicating a strong, downward-pointing dependency graph.",
-            "design_analysis": "No abstraction separates data access from business orchestration.",
-            "score_explanation": {
-              "adherence_score": "Low (2) – direct instantiation of implementation class.",
-              "violation_severity": "High (4) – fragile and hard to extend.",
-              "violated_principles": "DIP violated – dependencies must point toward stable interfaces."
-            }
-          }
-        },
-        "refactored_case": {
-          "explanation": "The refactored Python version defines a Database abstract base class and accepts a Database instance in EmailService, promoting loose coupling and interface-driven collaboration.",
-          "adherence_score": 5,
-          "violation_severity": 1,
-          "violated_principles": [],
-          "rationale": {
-            "reasoning_process": "By abstracting the database contract and injecting it into EmailService, the high-level module no longer controls database creation or type. This supports dependency inversion and allows test doubles or alternative implementations to be passed at runtime. The new design demonstrates clean separation and strong adherence to DIP.",
-            "design_analysis": "Abstraction-first architecture achieves flexibility, testability, and independence.",
-            "score_explanation": {
-              "adherence_score": "High (5) – complete inversion to abstract dependency.",
-              "violation_severity": "Minimal (1) – no concrete bindings remain.",
-              "violated_principles": "None."
-            }
-          }
-        }
-      }
+      "explanation": "This Python example breaks the Dependency Inversion Principle because EmailService constructs a concrete MySQLDatabase internally, creating rigid coupling between layers.",
+      "adherence score": 2,
+      "violation severity": 4
+
     },
     {
       "input": "import java.util.*;\nimport java.util.concurrent.*;\n\npublic class MySQLDatabase {\n    private String connectionString;\n    private Properties connectionProperties;\n    private boolean isConnected;\n    private int connectionTimeout;\n    private ExecutorService connectionPool;\n    \n    public MySQLDatabase(String connectionString, Properties properties) {\n        this.connectionString = connectionString;\n        this.connectionProperties = properties;\n        this.isConnected = false;\n        this.connectionTimeout = 30;\n        this.connectionPool = Executors.newFixedThreadPool(10);\n    }\n    \n    public void connect() throws Exception {\n        if (!isConnected) {\n            System.out.println(\"Establishing MySQL connection with: \" + connectionString);\n            Thread.sleep(connectionTimeout);\n            isConnected = true;\n            System.out.println(\"MySQL connection established successfully\");\n        }\n    }\n    \n    public void disconnect() {\n        if (isConnected) {\n            System.out.println(\"Closing MySQL connection\");\n            isConnected = false;\n            connectionPool.shutdown();\n        }\n    }\n    \n    public String getUserEmail(int userId) throws Exception {\n        if (!isConnected) {\n            throw new RuntimeException(\"Database connection not established\");\n        }\n        \n        Future<String> future = connectionPool.submit(() -> {\n            try {\n                Thread.sleep(10);\n                return \"user\" + userId + \"@enterprise.com\";\n            } catch (InterruptedException e) {\n                throw new RuntimeException(e);\n            }\n        });\n        \n        return future.get(5, TimeUnit.SECONDS);\n    }\n    \n    public boolean validateUser(int userId) throws Exception {\n        if (!isConnected) {\n            throw new RuntimeException(\"Database connection not established\");\n        }\n        \n        Future<Boolean> future = connectionPool.submit(() -> {\n            try {\n                Thread.sleep(5);\n                return userId > 0 && userId < 100000;\n            } catch (InterruptedException e) {\n                throw new RuntimeException(e);\n            }\n        });\n        \n        return future.get(3, TimeUnit.SECONDS);\n    }\n    \n    public List<String> getUserGroups(int userId) throws Exception {\n        if (!isConnected) {\n            throw new RuntimeException(\"Database connection not established\");\n        }\n        \n        Future<List<String>> future = connectionPool.submit(() -> {\n            try {\n                Thread.sleep(15);\n                List<String> groups = new ArrayList<>();\n                groups.add(\"general\");\n                groups.add(\"department_\" + (userId % 10));\n                return groups;\n            } catch (InterruptedException e) {\n                throw new RuntimeException(e);\n            }\n        });\n        \n        return future.get(10, TimeUnit.SECONDS);\n    }\n    \n    public void updateEmailSentStatus(int userId, String messageId) throws Exception {\n        if (!isConnected) {\n            throw new RuntimeException(\"Database connection not established\");\n        }\n        \n        connectionPool.submit(() -> {\n            try {\n                Thread.sleep(20);\n                System.out.println(\"Email status updated for user \" + userId + \", message: \" + messageId);\n            } catch (InterruptedException e) {\n                throw new RuntimeException(e);\n            }\n        });\n    }\n}\n\npublic class EmailService {\n    private MySQLDatabase database;\n    private String smtpServer;\n    private int smtpPort;\n    private String smtpUsername;\n    private String smtpPassword;\n    private boolean useSSL;\n    \n    public EmailService(String smtpServer, int smtpPort, String username, String password, boolean useSSL) {\n        this.smtpServer = smtpServer;\n        this.smtpPort = smtpPort;\n        this.smtpUsername = username;\n        this.smtpPassword = password;\n        this.useSSL = useSSL;\n        \n        Properties dbProperties = new Properties();\n        dbProperties.setProperty(\"useSSL\", \"true\");\n        dbProperties.setProperty(\"serverTimezone\", \"UTC\");\n        \n        this.database = new MySQLDatabase(\"jdbc:mysql://localhost:3306/enterprise_users?useSSL=true&serverTimezone=UTC\", dbProperties);\n    }\n    \n    public void sendEmail(int userId, String subject, String message, String priority) throws Exception {\n        database.connect();\n        \n        try {\n            if (!database.validateUser(userId)) {\n                System.out.println(\"User validation failed for ID: \" + userId);\n                return;\n            }\n            \n            String email = database.getUserEmail(userId);\n            List<String> groups = database.getUserGroups(userId);\n            \n            System.out.println(\"Configuring SMTP connection:\");\n            System.out.println(\"Server: \" + smtpServer + \":\" + smtpPort);\n            System.out.println(\"SSL: \" + useSSL);\n            System.out.println(\"Authentication: \" + smtpUsername);\n            \n            String messageId = UUID.randomUUID().toString();\n            \n            System.out.println(\"Sending email:\");\n            System.out.println(\"To: \" + email);\n            System.out.println(\"Subject: \" + subject);\n            System.out.println(\"Message: \" + message);\n            System.out.println(\"Priority: \" + priority);\n            System.out.println(\"User Groups: \" + groups);\n            System.out.println(\"Message ID: \" + messageId);\n            \n            database.updateEmailSentStatus(userId, messageId);\n            \n        } finally {\n            database.disconnect();\n        }\n    }\n    \n    public void sendBulkEmails(int[] userIds, String subject, String message, String priority) throws Exception {\n        database.connect();\n        \n        try {\n            List<Future<Void>> futures = new ArrayList<>();\n            ExecutorService executor = Executors.newFixedThreadPool(5);\n            \n            for (int userId : userIds) {\n                futures.add(executor.submit(() -> {\n                    try {\n                        if (database.validateUser(userId)) {\n                            String email = database.getUserEmail(userId);\n                            List<String> groups = database.getUserGroups(userId);\n                            String messageId = UUID.randomUUID().toString();\n                            \n                            System.out.println(\"Bulk email sent to: \" + email + \" (Groups: \" + groups + \")\");\n                            database.updateEmailSentStatus(userId, messageId);\n                        }\n                    } catch (Exception e) {\n                        System.err.println(\"Failed to send email to user \" + userId + \": \" + e.getMessage());\n                    }\n                    return null;\n                }));\n            }\n            \n            for (Future<Void> future : futures) {\n                future.get();\n            }\n            \n            executor.shutdown();\n            \n        } finally {\n            database.disconnect();\n        }\n    }\n    \n    public void sendScheduledEmails(Map<Integer, String> userMessages, String subject, long delaySeconds) throws Exception {\n        database.connect();\n        \n        try {\n            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(3);\n            \n            for (Map.Entry<Integer, String> entry : userMessages.entrySet()) {\n                int userId = entry.getKey();\n                String personalizedMessage = entry.getValue();\n                \n                scheduler.schedule(() -> {\n                    try {\n                        if (database.validateUser(userId)) {\n                            String email = database.getUserEmail(userId);\n                            List<String> groups = database.getUserGroups(userId);\n                            String messageId = UUID.randomUUID().toString();\n                            \n                            System.out.println(\"Scheduled email sent to: \" + email);\n                            System.out.println(\"Personalized message: \" + personalizedMessage);\n                            database.updateEmailSentStatus(userId, messageId);\n                        }\n                    } catch (Exception e) {\n                        System.err.println(\"Failed to send scheduled email to user \" + userId + \": \" + e.getMessage());\n                    }\n                }, delaySeconds, TimeUnit.SECONDS);\n            }\n            \n        } finally {\n            database.disconnect();\n        }\n    }\n}",
@@ -162,38 +50,10 @@
       "level": "HARD",
       "language": "JAVA",
       "violation": "DIP",
-      "human_evaluation": {
-        "violation_case": {
-          "explanation": "The advanced Java implementation violates the Dependency Inversion Principle by coupling EmailService to a concrete MySQLDatabase implementation with detailed connection, pooling, and thread-management logic.",
-          "adherence_score": 1,
-          "violation_severity": 5,
-          "violated_principles": ["DIP"],
-          "rationale": {
-            "reasoning_process": "In this version, EmailService both instantiates and controls the MySQLDatabase directly, binding the business logic to a complex infrastructure layer. Because all methods rely on concrete MySQL semantics, no abstraction boundary exists. Any change in database technology, pooling behavior, or API would cascade through the email system. This is a textbook violation of dependency inversion at scale.",
-            "design_analysis": "High-level orchestration layer entangled with low-level persistence concerns and concurrency control.",
-            "score_explanation": {
-              "adherence_score": "Very low (1) – complete dependency on concrete infrastructure.",
-              "violation_severity": "Critical (5) – massive cross-layer impact potential.",
-              "violated_principles": "DIP violated – abstractions should own dependency direction."
-            }
-          }
-        },
-        "refactored_case": {
-          "explanation": "The refactored design extracts a DatabaseService interface and injects it into EmailService, decoupling application logic from database implementation and achieving full dependency inversion.",
-          "adherence_score": 5,
-          "violation_severity": 1,
-          "violated_principles": [],
-          "rationale": {
-            "reasoning_process": "Introducing DatabaseService as a formal abstraction reverses the dependency direction—EmailService now communicates only through an interface. MySQLDatabase simply implements this interface, allowing new storage engines to be integrated without touching EmailService. This also simplifies testing and parallel development between modules, demonstrating strong DIP compliance.",
-            "design_analysis": "Dependency inversion via abstract contracts reestablishes modular independence and scalability.",
-            "score_explanation": {
-              "adherence_score": "High (5) – all dependencies inverted cleanly.",
-              "violation_severity": "Minimal (1) – abstraction shields volatility.",
-              "violated_principles": "None."
-            }
-          }
-        }
-      }
+      "explanation": "The advanced Java implementation violates the Dependency Inversion Principle by coupling EmailService to a concrete MySQLDatabase implementation with detailed connection, pooling, and thread-management logic.",
+      "adherence score": 1,
+      "violation severity": 5
+
     }
   ]
 }

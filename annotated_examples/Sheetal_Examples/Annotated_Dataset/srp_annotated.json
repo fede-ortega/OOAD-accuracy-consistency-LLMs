@@ -7,38 +7,9 @@
       "language": "JAVA",
       "violation": "SRP",
       "description": "User database email operations",
-      "human_evaluation": {
-        "violation_case": {
-          "explanation": "The User class violates SRP because it handles both data persistence and email communication, combining two unrelated responsibilities.",
-          "adherence_score": 2,
-          "violation_severity": 4,
-          "violated_principles": ["SRP"],
-          "rationale": {
-            "reasoning_process": "Reviewed the User class and observed that it not only stores user data but also performs database saving and email sending. These are independent concerns belonging to separate layers. The class becomes tightly coupled to infrastructure logic, leading to high maintenance cost. Any change in database or email logic forces modification of the same class.",
-            "design_analysis": "Class mixes persistence and messaging logic, reducing cohesion and flexibility.",
-            "score_explanation": {
-              "adherence_score": "Low (2) — multiple unrelated responsibilities exist.",
-              "violation_severity": "High (4) — frequent changes required on unrelated reasons.",
-              "violated_principles": "SRP violated — class should have only one reason to change."
-            }
-          }
-        },
-        "refactored_case": {
-          "explanation": "The refactored version separates concerns into UserRepository for database and EmailService for notifications, giving each class one clear responsibility.",
-          "adherence_score": 5,
-          "violation_severity": 1,
-          "violated_principles": [],
-          "rationale": {
-            "reasoning_process": "The revised structure keeps User as a data model while offloading storage and email functionality to specialized classes. This increases cohesion and allows changes to be localized. The separation of persistence and communication demonstrates strong SRP compliance. Each class now has a single purpose and can evolve independently.",
-            "design_analysis": "Responsibilities are divided by concern, improving modularity and maintainability.",
-            "score_explanation": {
-              "adherence_score": "High (5) — distinct single-purpose classes.",
-              "violation_severity": "Minimal (1) — changes isolated to one class.",
-              "violated_principles": "None."
-            }
-          }
-        }
-      }
+      "explanation": "The User class violates SRP because it handles both data persistence and email communication, combining two unrelated responsibilities.",
+        "adherence_score": 2,
+        "violation_severity": 4
     },
     {
       "input": "public class Employee {\n    private String name;\n    private double baseSalary;\n    private int yearsOfService;\n    \n    public Employee(String name, double baseSalary, int yearsOfService) {\n        this.name = name;\n        this.baseSalary = baseSalary;\n        this.yearsOfService = yearsOfService;\n    }\n    \n    public double calculateSalary() {\n        return baseSalary + (yearsOfService * 1000);\n    }\n    \n    public void printPaySlip() {\n        System.out.println(\"Pay slip for \" + name + \": $\" + calculateSalary());\n    }\n}",
@@ -47,38 +18,9 @@
       "language": "JAVA",
       "violation": "SRP",
       "description": "Employee salary payslip system",
-      "human_evaluation": {
-        "violation_case": {
-          "explanation": "The Employee class violates SRP by handling both salary computation and payslip display logic, merging business and presentation responsibilities.",
+      "explanation": "The Employee class violates SRP by handling both salary computation and payslip display logic, merging business and presentation responsibilities.",
           "adherence_score": 2,
-          "violation_severity": 4,
-          "violated_principles": ["SRP"],
-          "rationale": {
-            "reasoning_process": "In this version, the Employee class calculates salary and prints payslips. These two concerns are unrelated — one involves business rules and the other deals with output formatting. Modifying how salaries are calculated or how payslips are presented would both require changes in the same class, indicating poor separation of concerns.",
-            "design_analysis": "Mixed presentation and computation logic lowers cohesion and complicates testing.",
-            "score_explanation": {
-              "adherence_score": "Low (2) — multiple change reasons within one class.",
-              "violation_severity": "High (4) — frequent edits for unrelated updates.",
-              "violated_principles": "SRP violated — one class handles both data and presentation."
-            }
-          }
-        },
-        "refactored_case": {
-          "explanation": "The refactored structure introduces SalaryCalculator for computation and PaySlipPrinter for output, ensuring each class has one focused role.",
-          "adherence_score": 5,
-          "violation_severity": 1,
-          "violated_principles": [],
-          "rationale": {
-            "reasoning_process": "Employee now only contains data. SalaryCalculator handles salary logic, and PaySlipPrinter handles presentation. Each component can be modified independently without affecting others, aligning perfectly with SRP. The refactor also improves reusability and testing simplicity.",
-            "design_analysis": "Classes divided by function, ensuring cohesive responsibilities.",
-            "score_explanation": {
-              "adherence_score": "High (5) — responsibilities isolated clearly.",
-              "violation_severity": "Minimal (1) — robust single-purpose design.",
-              "violated_principles": "None."
-            }
-          }
-        }
-      }
+          "violation_severity": 4
     },
     {
       "input": "public class Book {\n    private String title;\n    private String author;\n    private String content;\n    \n    public Book(String title, String author, String content) {\n        this.title = title;\n        this.author = author;\n        this.content = content;\n    }\n    \n    public void printBook() {\n        System.out.println(\"Title: \" + title);\n        System.out.println(\"Author: \" + author);\n        System.out.println(\"Content: \" + content);\n    }\n    \n    public void saveToFile(String filename) {\n        System.out.println(\"Saving book to \" + filename);\n    }\n}",
@@ -87,38 +29,9 @@
       "language": "JAVA",
       "violation": "SRP",
       "description": "Book printing file saving",
-      "human_evaluation": {
-        "violation_case": {
-          "explanation": "The Book class violates SRP by including both printing and file-saving responsibilities, mixing content representation and I/O operations.",
+      "explanation": "The Book class violates SRP by including both printing and file-saving responsibilities, mixing content representation and I/O operations.",
           "adherence_score": 2,
-          "violation_severity": 4,
-          "violated_principles": ["SRP"],
-          "rationale": {
-            "reasoning_process": "The Book class manages textual content and also handles output formatting and persistence. These are distinct operations from separate domains. Any change in file-saving logic or print format would modify this same class, proving low cohesion and poor design modularity.",
-            "design_analysis": "Combined content, display, and persistence logic reduce reusability.",
-            "score_explanation": {
-              "adherence_score": "Low (2) — mixed concerns in one class.",
-              "violation_severity": "High (4) — brittle structure.",
-              "violated_principles": "SRP violated — single class performs multiple unrelated tasks."
-            }
-          }
-        },
-        "refactored_case": {
-          "explanation": "The improved design moves printing into BookPrinter and saving into BookFileSaver, leaving Book as a pure data model.",
-          "adherence_score": 5,
-          "violation_severity": 1,
-          "violated_principles": [],
-          "rationale": {
-            "reasoning_process": "Book now simply represents metadata and content, while external services handle printing and persistence. This clean separation ensures changes in I/O or display logic don’t affect the data model. The result is high cohesion and clear modular structure consistent with SRP.",
-            "design_analysis": "Responsibilities isolated by layer, simplifying maintenance.",
-            "score_explanation": {
-              "adherence_score": "High (5) — each class has a single reason to change.",
-              "violation_severity": "Minimal (1) — strong modular adherence.",
-              "violated_principles": "None."
-            }
-          }
-        }
-      }
+          "violation_severity": 4
     },
     {
       "input": "public class Product {\n    private String name;\n    private double price;\n    \n    public Product(String name, double price) {\n        this.name = name;\n        this.price = price;\n    }\n    \n    public double applyDiscount(double percentage) {\n        return price * (1 - percentage / 100);\n    }\n    \n    public void displayProduct() {\n        System.out.println(\"Product: \" + name + \", Price: $\" + price);\n    }\n}",
@@ -127,38 +40,9 @@
       "language": "JAVA",
       "violation": "SRP",
       "description": "Product discount display system",
-      "human_evaluation": {
-        "violation_case": {
-          "explanation": "The Product class mixes pricing logic with UI display methods, breaking SRP by combining computation and visualization responsibilities.",
+      "explanation": "The Product class mixes pricing logic with UI display methods, breaking SRP by combining computation and visualization responsibilities.",
           "adherence_score": 2,
-          "violation_severity": 4,
-          "violated_principles": ["SRP"],
-          "rationale": {
-            "reasoning_process": "In the initial implementation, Product computes discounts and also outputs display text. These responsibilities belong to different modules — calculation vs. presentation. Changes to discount policies or display style would both modify this same class, violating SRP.",
-            "design_analysis": "Overloaded class design with conflicting concerns increases maintenance cost.",
-            "score_explanation": {
-              "adherence_score": "Low (2) — business logic and UI tightly coupled.",
-              "violation_severity": "High (4) — multiple reasons to change.",
-              "violated_principles": "SRP violated — mixed computational and presentational logic."
-            }
-          }
-        },
-        "refactored_case": {
-          "explanation": "DiscountCalculator handles price logic and ProductDisplay handles UI, allowing Product to act purely as a data holder.",
-          "adherence_score": 5,
-          "violation_severity": 1,
-          "violated_principles": [],
-          "rationale": {
-            "reasoning_process": "With pricing logic moved to DiscountCalculator and display behavior to ProductDisplay, Product focuses solely on holding data. This separation enhances modularity and makes updates isolated to their respective domains, demonstrating full SRP adherence.",
-            "design_analysis": "Functional separation promotes modularity and simplicity.",
-            "score_explanation": {
-              "adherence_score": "High (5) — independent, single-purpose components.",
-              "violation_severity": "Minimal (1) — clean adherence to SRP.",
-              "violated_principles": "None."
-            }
-          }
-        }
-      }
+          "violation_severity": 4
     },
     {
       "input": "class DatabaseHelper {\n    private String connectionString;\n    \n    public DatabaseHelper(String connectionString) {\n        this.connectionString = connectionString;\n    }\n    \n    public void saveUser(String userData) {\n        System.out.println(\"Saving user to database: \" + userData);\n    }\n    \n    public void updateUser(String userId, String data) {\n        System.out.println(\"Updating user \" + userId + \": \" + data);\n    }\n}\n\nclass EmailHelper {\n    private String smtpServer;\n    \n    public EmailHelper(String smtpServer) {\n        this.smtpServer = smtpServer;\n    }\n    \n    public void sendEmail(String recipient, String subject, String body) {\n        System.out.println(\"Sending email to: \" + recipient + \", Subject: \" + subject);\n    }\n}\n\npublic class User {\n    private String name;\n    private String email;\n    private String password;\n    private boolean isActive;\n    private String role;\n    private java.util.Date lastLogin;\n    private int loginAttempts;\n    \n    private DatabaseHelper database;\n    private EmailHelper emailHelper;\n    \n    public User(String name, String email) {\n        this.name = name;\n        this.email = email;\n        this.isActive = true;\n        this.role = \"USER\";\n        this.loginAttempts = 0;\n        this.database = new DatabaseHelper(\"jdbc:mysql://localhost:3306/users\");\n        this.emailHelper = new EmailHelper(\"smtp.company.com\");\n    }\n    \n    public void saveToDatabase() {\n        String userData = \"User: \" + name + \", Email: \" + email + \", Role: \" + role;\n        database.saveUser(userData);\n        System.out.println(\"Saving user \" + name + \" to database\");\n    }\n    \n    public void sendWelcomeEmail() {\n        emailHelper.sendEmail(email, \"Welcome\", \"Welcome \" + name + \"!\");\n        System.out.println(\"Sending welcome email to \" + email);\n    }\n    \n    public boolean validateEmail(String email) {\n        if (email == null || email.isEmpty()) {\n            return false;\n        }\n        return email.contains(\"@\") && email.contains(\".\");\n    }\n    \n    public boolean validatePassword(String password) {\n        if (password == null || password.length() < 8) {\n            return false;\n        }\n        boolean hasUpper = false;\n        boolean hasLower = false;\n        boolean hasDigit = false;\n        \n        for (char c : password.toCharArray()) {\n            if (Character.isUpperCase(c)) hasUpper = true;\n            if (Character.isLowerCase(c)) hasLower = true;\n            if (Character.isDigit(c)) hasDigit = true;\n        }\n        \n        return hasUpper && hasLower && hasDigit;\n    }\n    \n    public String hashPassword(String password) {\n        int hash = 0;\n        for (char c : password.toCharArray()) {\n            hash = hash * 31 + c;\n        }\n        return String.valueOf(Math.abs(hash));\n    }\n    \n    public boolean authenticate(String password) {\n        if (loginAttempts >= 5) {\n            System.out.println(\"Account locked due to too many failed attempts\");\n            return false;\n        }\n        \n        if (this.password != null && this.password.equals(hashPassword(password))) {\n            loginAttempts = 0;\n            lastLogin = new java.util.Date();\n            database.updateUser(email, \"Last login: \" + lastLogin);\n            return true;\n        }\n        \n        loginAttempts++;\n        return false;\n    }\n    \n    public void lockAccount() {\n        this.isActive = false;\n        database.updateUser(email, \"Account locked\");\n        emailHelper.sendEmail(email, \"Account Locked\", \"Your account has been locked\");\n        System.out.println(\"Account locked for user: \" + name);\n    }\n    \n    public void unlockAccount() {\n        this.isActive = true;\n        this.loginAttempts = 0;\n        database.updateUser(email, \"Account unlocked\");\n        System.out.println(\"Account unlocked for user: \" + name);\n    }\n    \n    public String getName() {\n        return name;\n    }\n    \n    public void setName(String name) {\n        this.name = name;\n    }\n    \n    public String getEmail() {\n        return email;\n    }\n    \n    public void setEmail(String email) {\n        this.email = email;\n    }\n    \n    public String getPassword() {\n        return password;\n    }\n    \n    public void setPassword(String password) {\n        this.password = hashPassword(password);\n    }\n    \n    public boolean isActive() {\n        return isActive;\n    }\n    \n    public String getRole() {\n        return role;\n    }\n    \n    public void setRole(String role) {\n        this.role = role;\n    }\n    \n    public java.util.Date getLastLogin() {\n        return lastLogin;\n    }\n    \n    public int getLoginAttempts() {\n        return loginAttempts;\n    }\n}",
@@ -167,38 +51,9 @@
       "language": "JAVA",
       "violation": "SRP",
       "description": "User database email operations",
-      "human_evaluation": {
-        "violation_case": {
-          "explanation": "This User class violates SRP by combining database management, email communication, validation, authentication, and account logic within one class.",
+      "explanation": "This User class violates SRP by combining database management, email communication, validation, authentication, and account logic within one class.",
           "adherence_score": 1,
-          "violation_severity": 5,
-          "violated_principles": ["SRP"],
-          "rationale": {
-            "reasoning_process": "The class handles persistence through DatabaseHelper, notifications through EmailHelper, validation, password hashing, and account state logic all together. Each function belongs to a different concern. This design creates massive coupling and makes any small change ripple through unrelated features. It represents a severe SRP breach with poor modularity.",
-            "design_analysis": "Monolithic class tightly bound to multiple subsystems, violating separation.",
-            "score_explanation": {
-              "adherence_score": "Very low (1) — too many unrelated concerns.",
-              "violation_severity": "Very high (5) — highly brittle and hard to maintain.",
-              "violated_principles": "SRP violated — no single cohesive responsibility."
-            }
-          }
-        },
-        "refactored_case": {
-          "explanation": "The refactored architecture separates each responsibility into distinct services — validation, authentication, password, database, and email — making the design modular and SRP-compliant.",
-          "adherence_score": 5,
-          "violation_severity": 1,
-          "violated_principles": [],
-          "rationale": {
-            "reasoning_process": "The new system isolates functionalities into their respective service classes, allowing User to remain a simple data structure. Authentication and database logic are handled independently, ensuring high cohesion and minimal interdependence. The design allows focused changes and promotes scalability, showing complete SRP adherence.",
-            "design_analysis": "Decomposition by concern achieves modularity and testability.",
-            "score_explanation": {
-              "adherence_score": "High (5) — responsibilities completely separated.",
-              "violation_severity": "Minimal (1) — strong SRP compliance.",
-              "violated_principles": "None."
-            }
-          }
-        }
-      }
+          "violation_severity": 5
     }
   ]
 }

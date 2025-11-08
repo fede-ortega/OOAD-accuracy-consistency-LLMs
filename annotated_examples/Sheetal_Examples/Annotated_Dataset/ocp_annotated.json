@@ -6,38 +6,9 @@
       "level": "EASY",
       "language": "JAVA",
       "violation": "OCP",
-      "human_evaluation": {
-        "violation_case": {
-          "explanation": "AreaCalculator violates OCP because it uses explicit if–else checks for each Shape subtype. Whenever a new Shape like Triangle or Polygon is added, the method must be changed.",
-          "adherence_score": 2,
-          "violation_severity": 4,
-          "violated_principles": ["OCP"],
-          "rationale": {
-            "reasoning_process": "Reviwed calculateArea() and found it branches on the shape type string and performs down-casting. This design forces modifications to AreaCalculator each time a new Shape appears. The method depends on concrete classes rather than abstractions, creating tight coupling and reducing extensibility. It clearly breaks the open-closed balance because extension requires editing existing logic.",
-            "design_analysis": "Frequent modification required; poor abstraction and coupling.",
-            "score_explanation": {
-              "adherence_score": "Low (2) because design requires code edits for new types.",
-              "violation_severity": "High (4) due to maintenance complexity.",
-              "violated_principles": "OCP violated—closedness not achieved."
-            }
-          }
-        },
-        "refactored_case": {
-          "explanation": "The refactored version introduces a Shape interface with getArea(), removing type checks and allowing new shapes to be added without altering AreaCalculator.",
-          "adherence_score": 5,
-          "violation_severity": 1,
-          "violated_principles": [],
-          "rationale": {
-            "reasoning_process": "In the improved version, Shape defines getArea(), and each implementation provides its own calculation. AreaCalculator now depends solely on the abstraction and remains unchanged when new shapes appear. This shift to polymorphism achieves full open-closed compliance and eliminates conditional logic.",
-            "design_analysis": "Decoupled abstraction ensures extension through new classes.",
-            "score_explanation": {
-              "adherence_score": "High (5) — extensible without modification.",
-              "violation_severity": "Minimal (1) — structure stable under change.",
-              "violated_principles": "None."
-            }
-          }
-        }
-      }
+      "explanation": "AreaCalculator violates OCP because it uses explicit if–else checks for each Shape subtype. Whenever a new Shape like Triangle or Polygon is added, the method must be changed.",
+          "adherence score": 2,
+          "violation severity": 4
     },
     {
       "input": "import java.util.*;\n\nenum CharacterType {\n    WARRIOR,\n    MAGE,\n    ARCHER\n}\n\nclass GameCharacter {\n    private final String name;\n    private final CharacterType type;\n    private final int baseAttack;\n\n    public GameCharacter(String name, CharacterType type, int baseAttack) {\n        this.name = name;\n        this.type = type;\n        this.baseAttack = baseAttack;\n    }\n\n    public String getName() { return name; }\n    public CharacterType getType() { return type; }\n    public int getBaseAttack() { return baseAttack; }\n}\n\nclass DamageCalculator {\n    public int calculateDamage(GameCharacter character) {\n        switch (character.getType()) {\n            case WARRIOR:\n                // Warriors hit harder but less consistent\n                return (int) (character.getBaseAttack() * 1.5);\n            case MAGE:\n                // Mages scale with a flat bonus\n                return character.getBaseAttack() + 20;\n            case ARCHER:\n                // Archers crit sometimes (simulated with random here)\n                boolean crit = new Random().nextBoolean();\n                return crit ? character.getBaseAttack() * 2 : character.getBaseAttack();\n            default:\n                throw new IllegalArgumentException(\"Unknown character type: \" + character.getType());\n        }\n    }\n}\n\n",
@@ -45,77 +16,19 @@
       "level": "EASY",
       "language": "JAVA",
       "violation": "OCP",
-      "human_evaluation": {
-        "violation_case": {
-          "explanation": "DamageCalculator violates OCP because it uses a switch on CharacterType. Adding new characters like Assassin or Healer means modifying this switch block.",
-          "adherence_score": 2,
-          "violation_severity": 4,
-          "violated_principles": ["OCP"],
-          "rationale": {
-            "reasoning_process": "The calculateDamage() method inspects CharacterType and applies damage formulas with hard-coded logic. This dependency on enum values ties all damage rules into one class. Extending the game with new character roles requires changing DamageCalculator, which breaks OCP by coupling behavior with type checks.",
-            "design_analysis": "Frequent modification required; poor abstraction and coupling.",
-            "score_explanation": {
-              "adherence_score": "Low (2) because design requires code edits for new types.",
-              "violation_severity": "High (4) due to maintenance complexity.",
-              "violated_principles": "OCP violated—closedness not achieved."
-            }
-          }
+      "explanation": "DamageCalculator violates OCP because it uses a switch on CharacterType. Adding new characters like Assassin or Healer means modifying this switch block.",
+          "adherence score": 2,
+          "violation severity": 4
         },
-        "refactored_case": {
-          "explanation": "The refactored version lets each subclass like Warrior or Mage define its own calculateDamage(), removing all switch statements and improving extensibility.",
-          "adherence_score": 5,
-          "violation_severity": 1,
-          "violated_principles": [],
-          "rationale": {
-            "reasoning_process": "Each GameCharacter subclass now encapsulates its specific damage calculation, and the shared DamageDealer interface enforces a uniform contract. The main program calls calculateDamage() polymorphically. Adding a new class introduces no modifications to existing code, satisfying OCP through distributed responsibility.",
-            "design_analysis": "Decoupled abstraction ensures extension through new classes.",
-            "score_explanation": {
-              "adherence_score": "High (5) — extensible without modification.",
-              "violation_severity": "Minimal (1) — structure stable under change.",
-              "violated_principles": "None."
-            }
-          }
-        }
-      }
-    },
     {
       "input": "import java.util.*;\n\nenum FoodType {\n    BURGER,\n    FRIES,\n    PIZZA,\n    DRINK\n}\n\nclass FoodItem {\n    private final String name;\n    private final FoodType type;\n    public FoodItem(String name, FoodType type) {\n        this.name = name; this.type = type;\n    }\n    public String getName() { return name; }\n    public FoodType getType() { return type; }\n}\n\nclass PriceCalculator {\n    public double calculatePrice(FoodItem item) {\n        switch (item.getType()) {\n            case BURGER: return 5.99;\n            case FRIES: return 2.49;\n            case PIZZA: return 7.99;\n            case DRINK: return 1.50;\n            default: throw new IllegalArgumentException(\"Unknown type\");\n        }\n    }\n}\n\nclass Order {\n    private final List<FoodItem> items = new ArrayList<>();\n    public void addItem(FoodItem item) { items.add(item); }\n    public List<FoodItem> getItems() { return items; }\n}\n\n",
       "output": "import java.util.*;\n\ninterface PricedItem {\n    String getName();\n    double getPrice();\n}\n\nabstract class FoodItem implements PricedItem {\n    private final String name;\n\n    protected FoodItem(String name) {\n        this.name = name;\n    }\n\n    @Override\n    public String getName() { return name; }\n}\n\nclass Burger extends FoodItem {\n    public Burger(String name) { super(name); }\n    @Override public double getPrice() { return 5.99; }\n}\n\nclass Fries extends FoodItem {\n    public Fries(String name) { super(name); }\n    @Override public double getPrice() { return 2.49; }\n}\n\nclass Pizza extends FoodItem {\n    public Pizza(String name) { super(name); }\n    @Override public double getPrice() { return 7.99; }\n}\n\nclass Drink extends FoodItem {\n    public Drink(String name) { super(name); }\n    @Override public double getPrice() { return 1.50; }\n}\n\nclass Order {\n    private final List<FoodItem> items = new ArrayList<>();\n    public void addItem(FoodItem item) { items.add(item); }\n    public List<FoodItem> getItems() { return items; }\n}\n",
       "level": "EASY",
       "language": "JAVA",
       "violation": "OCP",
-      "human_evaluation": {
-        "violation_case": {
-          "explanation": "PriceCalculator violates OCP by hard-coding prices inside a switch on FoodType. Adding new items like Salad or Dessert forces direct modification.",
-          "adherence_score": 2,
-          "violation_severity": 4,
-          "violated_principles": ["OCP"],
-          "rationale": {
-            "reasoning_process": "calculatePrice() explicitly enumerates each FoodType and embeds its logic. The approach centralizes price definitions and ties the class to specific item types. This coupling prevents easy menu expansion since any new FoodType requires editing the calculator. The code demonstrates a rigid and non-extensible structure.",
-            "design_analysis": "Frequent modification required; poor abstraction and coupling.",
-            "score_explanation": {
-              "adherence_score": "Low (2) because design requires code edits for new types.",
-              "violation_severity": "High (4) due to maintenance complexity.",
-              "violated_principles": "OCP violated—closedness not achieved."
-            }
-          }
-        },
-        "refactored_case": {
-          "explanation": "Each FoodItem subclass now defines its own getPrice(), so new menu items can be added simply by subclassing without touching the pricing logic.",
-          "adherence_score": 5,
-          "violation_severity": 1,
-          "violated_principles": [],
-          "rationale": {
-            "reasoning_process": "By introducing the PricedItem abstraction, each concrete food class implements its own pricing method. Price logic now lives within the item itself rather than in a central switch. The design enables adding new items independently, achieving OCP through delegation and polymorphism.",
-            "design_analysis": "Decoupled abstraction ensures extension through new classes.",
-            "score_explanation": {
-              "adherence_score": "High (5) — extensible without modification.",
-              "violation_severity": "Minimal (1) — structure stable under change.",
-              "violated_principles": "None."
-            }
-          }
-        }
-      }
+      "explanation": "PriceCalculator violates OCP by hard-coding prices inside a switch on FoodType. Adding new items like Salad or Dessert forces direct modification.",
+          "adherence score": 2,
+          "violation severity": 4
     },
     {
       "input": "import java.util.*;\n\nenum DeviceType { LIGHT, THERMOSTAT, DOOR_LOCK }\n\nclass SmartDevice {\n    private final String id;\n    private final DeviceType type;\n    public SmartDevice(String id, DeviceType type) { this.id = id; this.type = type; }\n    public String getId() { return id; }\n    public DeviceType getType() { return type; }\n}\n\nclass SmartHomeController {\n    public void turnOn(SmartDevice d) {\n        switch (d.getType()) {\n            case LIGHT: System.out.println(\"Light \" + d.getId() + \" is ON\"); break;\n            case THERMOSTAT: System.out.println(\"Thermostat \" + d.getId() + \" heating to 22°C\"); break;\n            case DOOR_LOCK: System.out.println(\"Door lock \" + d.getId() + \" cannot be turned ON\"); break;\n            default: throw new IllegalArgumentException(\"Unknown device\");\n        }\n    }\n    public double energyUsageKwh(SmartDevice d, int minutes) {\n        switch (d.getType()) {\n            case LIGHT: return 0.012 * minutes;       // ~12W bulb\n            case THERMOSTAT: return 0.08 * minutes;   // HVAC running\n            case DOOR_LOCK: return 0.0002 * minutes;  // idle electronics\n            default: throw new IllegalArgumentException(\"Unknown device\");\n        }\n    }\n}\n\n",
@@ -123,38 +36,9 @@
       "level": "EASY",
       "language": "JAVA",
       "violation": "OCP",
-      "human_evaluation": {
-        "violation_case": {
-          "explanation": "SmartHomeController breaks OCP by using switch statements to handle each DeviceType explicitly. Adding a new device like Camera or Speaker forces controller changes.",
-          "adherence_score": 2,
-          "violation_severity": 4,
-          "violated_principles": ["OCP"],
-          "rationale": {
-            "reasoning_process": "The SmartHomeController directly switches on device types to decide both behavior and energy consumption. This logic couples controller code to every possible device type, meaning new devices require modifying two switch blocks. The structure is brittle and resists extension because control logic is centralized rather than delegated.",
-            "design_analysis": "Frequent modification required; poor abstraction and coupling.",
-            "score_explanation": {
-              "adherence_score": "Low (2) because design requires code edits for new types.",
-              "violation_severity": "High (4) due to maintenance complexity.",
-              "violated_principles": "OCP violated—closedness not achieved."
-            }
-          }
-        },
-        "refactored_case": {
-          "explanation": "Each SmartDevice now implements its own turnOn() and energyUsageKwh(), letting SmartHomeController delegate calls without modification.",
-          "adherence_score": 5,
-          "violation_severity": 1,
-          "violated_principles": [],
-          "rationale": {
-            "reasoning_process": "By introducing a SmartDevice interface and moving control logic into the devices themselves, SmartHomeController simply calls polymorphic methods. Adding new devices involves defining a new class, not changing controller code. This separation achieves full open-closed compliance and simplifies maintenance.",
-            "design_analysis": "Decoupled abstraction ensures extension through new classes.",
-            "score_explanation": {
-              "adherence_score": "High (5) — extensible without modification.",
-              "violation_severity": "Minimal (1) — structure stable under change.",
-              "violated_principles": "None."
-            }
-          }
-        }
-      }
+      "explanation": "SmartHomeController breaks OCP by using switch statements to handle each DeviceType explicitly. Adding a new device like Camera or Speaker forces controller changes.",
+          "adherence score": 2,
+          "violation severity": 4
     },
     {
       "input": "abstract class Entity {\n    private static long NEXT_ID = 1;\n    private final long id;\n\n    protected Entity() {\n        this.id = NEXT_ID++;\n    }\n\n    public long getId() {\n        return id;\n    }\n}\n\nabstract class GraphicObject extends Entity {\n    private final String color;\n    private final int layer;\n\n    protected GraphicObject(String color, int layer) {\n        this.color = color;\n        this.layer = layer;\n    }\n\n    public String getColor() { return color; }\n    public int getLayer()    { return layer; }\n}\n\nenum ShapeKind { RECTANGLE, CIRCLE, TRIANGLE, CUBE, SPHERE }\n\nabstract class Shape extends GraphicObject {\n    private final ShapeKind kind;\n\n    protected Shape(ShapeKind kind, String color, int layer) {\n        super(color, layer);\n        this.kind = kind;\n    }\n\n    public ShapeKind getKind() { return kind; }\n}\n\nabstract class TwoDShape extends Shape {\n    protected TwoDShape(ShapeKind kind, String color, int layer) {\n        super(kind, color, layer);\n    }\n}\n\nabstract class ThreeDShape extends Shape {\n    protected ThreeDShape(ShapeKind kind, String color, int layer) {\n        super(kind, color, layer);\n    }\n}\n\n\nclass Rectangle extends TwoDShape {\n    private final double width, height;\n\n    public Rectangle(double width, double height, String color, int layer) {\n        super(ShapeKind.RECTANGLE, color, layer);\n        this.width = width; this.height = height;\n    }\n    public double getWidth()  { return width; }\n    public double getHeight() { return height; }\n}\n\nclass Circle extends TwoDShape {\n    private final double radius;\n\n    public Circle(double radius, String color, int layer) {\n        super(ShapeKind.CIRCLE, color, layer);\n        this.radius = radius;\n    }\n    public double getRadius() { return radius; }\n}\n\nclass Triangle extends TwoDShape {\n    private final double a, b, c; // sides\n\n    public Triangle(double a, double b, double c, String color, int layer) {\n        super(ShapeKind.TRIANGLE, color, layer);\n        this.a = a; this.b = b; this.c = c;\n    }\n    public double getA() { return a; }\n    public double getB() { return b; }\n    public double getC() { return c; }\n}\n\nclass Cube extends ThreeDShape {\n    private final double edge;\n\n    public Cube(double edge, String color, int layer) {\n        super(ShapeKind.CUBE, color, layer);\n        this.edge = edge;\n    }\n    public double getEdge() { return edge; }\n}\n\nclass Sphere extends ThreeDShape {\n    private final double radius;\n\n    public Sphere(double radius, String color, int layer) {\n        super(ShapeKind.SPHERE, color, layer);\n        this.radius = radius;\n    }\n    public double getRadius() { return radius; }\n}\n\n\nenum Metric { AREA, PERIMETER, VOLUME, DIAGONAL, BOUNDING_BOX_WIDTH }\n\nclass BoundingBox {\n    public final double width;\n    public final double height;\n    public BoundingBox(double width, double height) { this.width = width; this.height = height; }\n    @Override public String toString() { return \"BBox(\" + width + \"x\" + height + \")\"; }\n}\n\nclass MetricCalculator {\n    public double compute(Shape shape, Metric metric) {\n        switch (shape.getKind()) {\n            case RECTANGLE: {\n                Rectangle r = (Rectangle) shape;\n                return switch (metric) {\n                    case AREA -> r.getWidth() * r.getHeight();\n                    case PERIMETER -> 2 * (r.getWidth() + r.getHeight());\n                    case DIAGONAL -> Math.hypot(r.getWidth(), r.getHeight());\n                    case BOUNDING_BOX_WIDTH -> r.getWidth();\n                    case VOLUME -> 0;\n                };\n            }\n            case CIRCLE: {\n                Circle c = (Circle) shape;\n                return switch (metric) {\n                    case AREA -> Math.PI * c.getRadius() * c.getRadius();\n                    case PERIMETER -> 2 * Math.PI * c.getRadius();\n                    case DIAGONAL -> 2 * c.getRadius(); // diameter\n                    case BOUNDING_BOX_WIDTH -> 2 * c.getRadius();\n                    case VOLUME -> 0;\n                };\n            }\n            case TRIANGLE: {\n                Triangle t = (Triangle) shape;\n                double s = (t.getA() + t.getB() + t.getC()) / 2.0;\n                return switch (metric) {\n                    case AREA -> Math.sqrt(Math.max(0, s * (s - t.getA()) * (s - t.getB()) * (s - t.getC())));\n                    case PERIMETER -> (t.getA() + t.getB() + t.getC());\n                    case DIAGONAL -> Math.max(t.getA(), Math.max(t.getB(), t.getC()));\n                    case BOUNDING_BOX_WIDTH -> Math.max(t.getA(), Math.max(t.getB(), t.getC())); // bogus, but consistent\n                    case VOLUME -> 0;\n                };\n            }\n            case CUBE: {\n                Cube cube = (Cube) shape;\n                return switch (metric) {\n                    case AREA -> 6 * cube.getEdge() * cube.getEdge();\n                    case PERIMETER -> 12 * cube.getEdge();\n                    case VOLUME -> Math.pow(cube.getEdge(), 3);\n                    case DIAGONAL -> Math.sqrt(3) * cube.getEdge();\n                    case BOUNDING_BOX_WIDTH -> cube.getEdge();\n                };\n            }\n            case SPHERE: {\n                Sphere s = (Sphere) shape;\n                return switch (metric) {\n                    case AREA -> 4 * Math.PI * s.getRadius() * s.getRadius();\n                    case PERIMETER -> 0; // not meaningful\n                    case VOLUME -> (4.0 / 3.0) * Math.PI * Math.pow(s.getRadius(), 3);\n                    case DIAGONAL -> 2 * s.getRadius(); // diameter\n                    case BOUNDING_BOX_WIDTH -> 2 * s.getRadius();\n                };\n            }\n            default: return 0;\n        }\n    }\n}\n\nclass ShapeValidator {\n    public boolean isValid(Shape shape) {\n        switch (shape.getKind()) {\n            case RECTANGLE: {\n                Rectangle r = (Rectangle) shape;\n                return r.getWidth() > 0 && r.getHeight() > 0;\n            }\n            case CIRCLE: {\n                Circle c = (Circle) shape;\n                return c.getRadius() > 0;\n            }\n            case TRIANGLE: {\n                Triangle t = (Triangle) shape;\n                return t.getA() > 0 && t.getB() > 0 && t.getC() > 0\n                    && t.getA() + t.getB() > t.getC()\n                    && t.getA() + t.getC() > t.getB()\n                    && t.getB() + t.getC() > t.getA();\n            }\n            case CUBE: {\n                Cube cube = (Cube) shape;\n                return cube.getEdge() > 0;\n            }\n            case SPHERE: {\n                Sphere s = (Sphere) shape;\n                return s.getRadius() > 0;\n            }\n            default: return false;\n        }\n    }\n}\n\nclass ShapeRenderer {\n    public String renderPseudoSvg(Shape shape) {\n        switch (shape.getKind()) {\n            case RECTANGLE: {\n                Rectangle r = (Rectangle) shape;\n                return \"<rect w=\\\"\" + r.getWidth() + \"\\\" h=\\\"\" + r.getHeight()\n                        + \"\\\" fill=\\\"\" + shape.getColor() + \"\\\" layer=\\\"\" + shape.getLayer() + \"\\\"/>\";\n            }\n            case CIRCLE: {\n                Circle c = (Circle) shape;\n                return \"<circle r=\\\"\" + c.getRadius()\n                        + \"\\\" fill=\\\"\" + shape.getColor() + \"\\\" layer=\\\"\" + shape.getLayer() + \"\\\"/>\";\n            }\n            case TRIANGLE: {\n                Triangle t = (Triangle) shape;\n                return \"<polygon a=\\\"\" + t.getA() + \"\\\" b=\\\"\" + t.getB() + \"\\\" c=\\\"\" + t.getC()\n                        + \"\\\" fill=\\\"\" + shape.getColor() + \"\\\" layer=\\\"\" + shape.getLayer() + \"\\\"/>\";\n            }\n            case CUBE: {\n                Cube cube = (Cube) shape;\n                return \"<cube edge=\\\"\" + cube.getEdge()\n                        + \"\\\" materialColor=\\\"\" + shape.getColor() + \"\\\" layer=\\\"\" + shape.getLayer() + \"\\\"/>\";\n            }\n            case SPHERE: {\n                Sphere s = (Sphere) shape;\n                return \"<sphere r=\\\"\" + s.getRadius()\n                        + \"\\\" materialColor=\\\"\" + shape.getColor() + \"\\\" layer=\\\"\" + shape.getLayer() + \"\\\"/>\";\n            }\n            default: return \"<unknown/>\";\n        }\n    }\n}\n\nclass ShapeSerializer {\n    public String toCsvRow(Shape shape) {\n        switch (shape.getKind()) {\n            case RECTANGLE: {\n                Rectangle r = (Rectangle) shape;\n                return \"rectangle,\" + r.getWidth() + \",\" + r.getHeight() + \",\" + shape.getColor() + \",\" + shape.getLayer();\n            }\n            case CIRCLE: {\n                Circle c = (Circle) shape;\n                return \"circle,\" + c.getRadius() + \",\" + shape.getColor() + \",\" + shape.getLayer();\n            }\n            case TRIANGLE: {\n                Triangle t = (Triangle) shape;\n                return \"triangle,\" + t.getA() + \",\" + t.getB() + \",\" + t.getC() + \",\" + shape.getColor() + \",\" + shape.getLayer();\n            }\n            case CUBE: {\n                Cube cube = (Cube) shape;\n                return \"cube,\" + cube.getEdge() + \",\" + shape.getColor() + \",\" + shape.getLayer();\n            }\n            case SPHERE: {\n                Sphere s = (Sphere) shape;\n                return \"sphere,\" + s.getRadius() + \",\" + shape.getColor() + \",\" + shape.getLayer();\n            }\n            default: return \"unknown\";\n        }\n    }\n}\n\nclass ShapeFactory {\n    public Shape create(String spec) {\n        String[] parts = spec.split(\";\");\n        String type = parts[0].trim().toLowerCase();\n        java.util.Map<String,String> map = new java.util.HashMap<>();\n        for (int i = 1; i < parts.length; i++) {\n            String[] kv = parts[i].split(\"=\");\n            if (kv.length == 2) map.put(kv[0].trim().toLowerCase(), kv[1].trim());\n        }\n        String color = map.getOrDefault(\"color\", \"black\");\n        int layer = Integer.parseInt(map.getOrDefault(\"layer\", \"0\"));\n\n        switch (type) {\n            case \"rectangle\":\n                return new Rectangle(\n                    Double.parseDouble(map.getOrDefault(\"width\",\"0\")),\n                    Double.parseDouble(map.getOrDefault(\"height\",\"0\")),\n                    color, layer\n                );\n            case \"circle\":\n                return new Circle(\n                    Double.parseDouble(map.getOrDefault(\"radius\",\"0\")),\n                    color, layer\n                );\n            case \"triangle\":\n                return new Triangle(\n                    Double.parseDouble(map.getOrDefault(\"a\",\"0\")),\n                    Double.parseDouble(map.getOrDefault(\"b\",\"0\")),\n                    Double.parseDouble(map.getOrDefault(\"c\",\"0\")),\n                    color, layer\n                );\n            case \"cube\":\n                return new Cube(\n                    Double.parseDouble(map.getOrDefault(\"edge\",\"0\")),\n                    color, layer\n                );\n            case \"sphere\":\n                return new Sphere(\n                    Double.parseDouble(map.getOrDefault(\"radius\",\"0\")),\n                    color, layer\n                );\n            default:\n                throw new IllegalArgumentException(\"Unknown shape type: \" + type);\n        }\n    }\n}\n\nclass ShapePricing {\n    private final MetricCalculator calc = new MetricCalculator();\n\n    public double price(Shape shape) {\n        switch (shape.getKind()) {\n            case RECTANGLE: {\n                double area = calc.compute(shape, Metric.AREA);\n                return 0.5 * area + shape.getLayer() * 2;\n            }\n            case CIRCLE: {\n                double area = calc.compute(shape, Metric.AREA);\n                double diag = calc.compute(shape, Metric.DIAGONAL);\n                return 0.6 * area + 0.1 * diag;\n            }\n            case TRIANGLE: {\n                double per = calc.compute(shape, Metric.PERIMETER);\n                return per * 0.8;\n            }\n            case CUBE: {\n                double vol = calc.compute(shape, Metric.VOLUME);\n                return 1.2 * vol;\n            }\n            case SPHERE: {\n                double vol = calc.compute(shape, Metric.VOLUME);\n                return 1.0 * vol + 10;\n            }\n            default: return 0;\n        }\n    }\n}\n\nclass LegendBuilder {\n    public String legendSymbol(Shape shape) {\n        switch (shape.getKind()) {\n            case RECTANGLE: return \"▭\";\n            case CIRCLE:    return \"◯\";\n            case TRIANGLE:  return \"△\";\n            case CUBE:      return \"⬛\";\n            case SPHERE:    return \"◯\";\n            default:        return \"?\";\n        }\n    }\n}\n\nclass CollisionEngine {\n    public BoundingBox boundingBox(Shape shape) {\n        switch (shape.getKind()) {\n            case RECTANGLE: {\n                Rectangle r = (Rectangle) shape;\n                return new BoundingBox(r.getWidth(), r.getHeight());\n            }\n            case CIRCLE: {\n                Circle c = (Circle) shape;\n                double d = 2 * c.getRadius();\n                return new BoundingBox(d, d);\n            }\n            case TRIANGLE: {\n                Triangle t = (Triangle) shape;\n                // naive placeholder: longest side × (average of other sides)\n                double max = Math.max(t.getA(), Math.max(t.getB(), t.getC()));\n                double avg = (t.getA() + t.getB() + t.getC() - max) / 2.0;\n                return new BoundingBox(max, avg);\n            }\n            case CUBE: {\n                Cube cube = (Cube) shape;\n                return new BoundingBox(cube.getEdge(), cube.getEdge());\n            }\n            case SPHERE: {\n                Sphere s = (Sphere) shape;\n                double d = 2 * s.getRadius();\n                return new BoundingBox(d, d);\n            }\n            default: return new BoundingBox(0, 0);\n        }\n    }\n\n    public boolean overlaps(Shape a, Shape b) {\n        BoundingBox A = boundingBox(a);\n        BoundingBox B = boundingBox(b);\n        return (A.width * A.height) > 0 && (B.width * B.height) > 0;\n    }\n}\n\nclass ShapeReport {\n    private final MetricCalculator calc = new MetricCalculator();\n    private final ShapeSerializer ser = new ShapeSerializer();\n    private final ShapeRenderer rnd = new ShapeRenderer();\n    private final CollisionEngine col = new CollisionEngine();\n    private final ShapePricing price = new ShapePricing();\n    private final LegendBuilder legend = new LegendBuilder();\n\n    public String summarize(java.util.List<Shape> shapes) {\n        StringBuilder sb = new StringBuilder();\n        sb.append(\"=== Shape Report (OCP-violating) ===\\n\");\n        for (Shape s : shapes) {\n            sb.append(\"ID \").append(s.getId())\n              .append(\" \").append(s.getKind())\n              .append(\" color=\").append(s.getColor())\n              .append(\" layer=\").append(s.getLayer()).append(\"\\n\");\n\n            sb.append(\"  CSV: \").append(ser.toCsvRow(s)).append(\"\\n\");\n            sb.append(\"  SVG: \").append(rnd.renderPseudoSvg(s)).append(\"\\n\");\n            sb.append(\"  Legend: \").append(legend.legendSymbol(s)).append(\"\\n\");\n\n            sb.append(\"  Metrics: \");\n            sb.append(\" area=\").append(calc.compute(s, Metric.AREA));\n            sb.append(\" perim=\").append(calc.compute(s, Metric.PERIMETER));\n            sb.append(\" diag=\").append(calc.compute(s, Metric.DIAGONAL));\n            if (s instanceof ThreeDShape) {\n                sb.append(\" vol=\").append(calc.compute(s, Metric.VOLUME));\n            }\n            sb.append(\"\\n\");\n\n            sb.append(\"  BBox: \").append(col.boundingBox(s)).append(\"\\n\");\n            sb.append(\"  Price: \").append(price.price(s)).append(\"\\n\\n\");\n        }\n        return sb.toString();\n    }\n}\n",
@@ -162,38 +46,9 @@
       "level": "HARD",
       "language": "JAVA",
       "violation": "OCP",
-      "human_evaluation": {
-        "violation_case": {
-          "explanation": "The ShapeReport and related classes violate OCP because they use nested switch statements on ShapeKind and Metric across multiple components. Every new shape or metric requires editing many files.",
-          "adherence_score": 1,
-          "violation_severity": 5,
-          "violated_principles": ["OCP"],
-          "rationale": {
-            "reasoning_process": "I analyzed MetricCalculator, ShapeRenderer, and ShapeReport; each repeats long switch structures based on ShapeKind and Metric. This duplication couples components tightly, making the system hard to extend or maintain. Adding a new shape such as Cylinder would force simultaneous edits in several classes, a clear OCP breach.",
-            "design_analysis": "Frequent modification required; poor abstraction and coupling.",
-            "score_explanation": {
-              "adherence_score": "Very low (1) — every addition requires code modification.",
-              "violation_severity": "Very high (5) — widespread structural rigidity.",
-              "violated_principles": "OCP violated—system closed to extension."
-            }
-          }
-        },
-        "refactored_case": {
-          "explanation": "The refactored design encapsulates rendering, validation, and metrics inside each Shape subclass. MetricCalculator uses a registry for extensibility, removing all global switches.",
-          "adherence_score": 5,
-          "violation_severity": 1,
-          "violated_principles": [],
-          "rationale": {
-            "reasoning_process": "The new architecture decentralizes logic—each Shape defines its own metrics and serialization behavior. MetricCalculator retrieves registered metric handlers dynamically. New shapes and metrics are added through registration rather than editing existing code, showing true OCP compliance and modular independence.",
-            "design_analysis": "Decoupled abstraction ensures extension through new classes.",
-            "score_explanation": {
-              "adherence_score": "High (5) — modular, extensible, and stable.",
-              "violation_severity": "Minimal (1) — adheres completely to OCP.",
-              "violated_principles": "None."
-            }
-          }
-        }
-      }
+      "explanation": "The ShapeReport and related classes violate OCP because they use nested switch statements on ShapeKind and Metric across multiple components. Every new shape or metric requires editing many files.",
+          "adherence score": 1,
+          "violation severity": 5
     }
   ]
 }
