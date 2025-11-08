@@ -1,28 +1,21 @@
 
 """
-solid_accuracy_evaluator.py
-
 Purpose:
     Run an LLM (Llama) "self-judge" on SOLID adherence for a given code string,
     focused on the "Accuracy" of adherence to SOLID principles.
-    The model must return a brief rationale and numeric ratings.
-
-Requirements (install first):
-    pip install python-dotenv llama-api-client
+    The model must return a brief rationale and Likert Scale for our annotation:
+    adherence_score and violation_severity (both 1–5 integers).
 
 Environment:
-    Put your API credentials/endpoint in a .env file if the client requires it.
+    API credentials/endpoint go in a .env file if the client requires it.
     This script loads .env automatically.
 
 Usage:
     # Pass the code as a single CLI argument (quote your string)
-    python solid_accuracy_evaluator.py --text "<your code here>"
+    python solid_accuracy_evaluator_strings_only.py --text "<your code here>" --pretty
 
     # Or read from a file to avoid shell-escaping issues
-    python solid_accuracy_evaluator.py --from-file path/to/code.txt
-
-    # Optional: pretty print
-    python solid_accuracy_evaluator.py --text "<code>" --pretty
+    python solid_accuracy_evaluator_strings_only.py --from-file path/to/code.txt --pretty
 """
 
 from __future__ import annotations
@@ -38,19 +31,15 @@ from dotenv import load_dotenv
 from llama_api_client import LlamaAPIClient
 
 
-# -------------------------------
-# Prompt Template (OOP component)
-# -------------------------------
-
 @dataclass
 class AccuracyPromptTemplate:
-    """Builds the evaluation prompt for SOLID 'Accuracy' on a code snippet."""
+    """Evaluation prompt for SOLID Accuracy"""
 
     max_words: int = 80
 
     def build_system_prompt(self) -> str:
         return (
-            "You are a strict senior software design reviewer. "
+            "You are a strict software design reviewer familiar with OOAD principles. "
             "Judge the provided code's adherence to SOLID principles with focus on ACCURACY: "
             "how well responsibilities, abstractions, and coupling in the code align with SOLID. "
             "Respond ONLY with valid JSON using the keys: "
@@ -66,7 +55,7 @@ class AccuracyPromptTemplate:
             "- adherence_score (1–5): 1=largely non-adherent; 2=poor; 3=mixed; 4=good; 5=excellent.\n"
             "- violation_severity (1–5): 1=negligible; 2=low; 3=moderate; 4=high; 5=critical.\n\n"
             "Evaluate the following code for SOLID ACCURACY. "
-            "Cite concrete issues (e.g., SRP violations, tight coupling, hard-coded deps, God classes, leaky abstractions). "
+            "Cite concrete issues (e.g., SRP violations, tight coupling, hard-coded deps, magic numbers, leaky abstractions). "
             "If mixed, balance strengths and weaknesses. Return ONLY JSON."
         )
         schema_hint = (
@@ -80,12 +69,8 @@ class AccuracyPromptTemplate:
         return f"{scale}\n\n{schema_hint}\n\nCODE TO REVIEW:\n\n{code}"
 
 
-# ------------------------
-# Llama Client (wrapper)
-# ------------------------
-
 class LlamaJudgeClient:
-    """Thin wrapper around LlamaAPIClient for chat completions."""
+    """wrapper around LlamaAPIClient."""
 
     def __init__(self, model: str = "Llama-4-Maverick-17B-128E-Instruct-FP8", temperature: float = 0.0, max_completion_tokens: int = 6000):
         load_dotenv()
@@ -104,8 +89,6 @@ class LlamaJudgeClient:
             temperature=self.temperature,
             max_completion_tokens=self.max_completion_tokens,
         )
-        # The reference shows: completion.completion_message.content.text
-        # Adjust here if your client returns a different structure.
         return completion.completion_message.content.text
 
 
@@ -114,11 +97,10 @@ class LlamaJudgeClient:
 # --------------------------------
 
 class JsonExtractor:
-    """Best-effort JSON extractor to handle occasional model formatting issues."""
+    """JSON extractor to handle occasional model formatting issues."""
 
     @staticmethod
     def first_json_object(text: str) -> str:
-        # Try to find the first top-level JSON object in the text.
         # This handles cases where the model wraps JSON in prose or code fences.
         match = re.search(r"\{[\s\S]*\}", text)
         if not match:
@@ -133,7 +115,7 @@ class JsonExtractor:
 
 @dataclass
 class SolidAccuracyEvaluator:
-    """Coordinates prompt building, model call, and JSON parsing."""
+    """Coordinates prompt building, model call, and JSON parsing"""
 
     client: LlamaJudgeClient
     template: AccuracyPromptTemplate
@@ -153,7 +135,6 @@ class SolidAccuracyEvaluator:
                 "raw": raw_text,
                 "error": str(e),
             }
-        # Minimal post-validation/coercion
         parsed = SolidAccuracyEvaluator._coerce_and_clip(parsed)
         return parsed
 
@@ -177,9 +158,7 @@ class SolidAccuracyEvaluator:
         return data
 
 
-# -------------
-# CLI / main
-# -------------
+# CLI
 
 def _read_input(args: argparse.Namespace) -> str:
     if args.text is not None:
