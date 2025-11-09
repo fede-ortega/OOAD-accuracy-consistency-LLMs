@@ -1,0 +1,252 @@
+[
+  {
+    "explanation": "EmailService creates and depends directly on MySQLDatabase and its connection details. No abstraction boundary or inversion exists; high-level policy is coupled to low-level storage and pool behavior. Swapping databases or testing requires editing EmailService, not supplying an abstraction.",
+    "adherence_score": 1,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "PaymentProcessor constructs and depends on PayPalGateway directly. There is no abstraction or injection; the high-level module is tied to one concrete implementation. Replacing gateways or unit testing requires editing PaymentProcessor, indicating a straightforward DIP and IoC violation.",
+    "adherence_score": 1,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "PaymentProcessor constructs and depends on PayPalGateway directly. There is no abstraction or injection; the high-level module is tied to one concrete implementation. Replacing gateways or unit testing requires editing PaymentProcessor, indicating a straightforward DIP and IoC violation.",
+    "adherence_score": 1,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "PaymentProcessor instantiates two concrete gateways and branches on a string. It depends on low-level details and differing APIs, leaking knowledge of IDs and providers. Adding a new gateway or changing one forces edits to PaymentProcessor, evidencing strong DIP and IoC violations.",
+    "adherence_score": 1,
+    "violation_severity": 5
+  },
+  {
+    "explanation": "PaymentProcessor owns concrete PayPal and Stripe gateways and selects via string flags. High-level logic depends on low-level classes and their differing APIs; provider knowledge and ID formats leak upward. Extending or testing requires editing PaymentProcessor, showing a strong DIP and IoC violation.",
+    "adherence_score": 1,
+    "violation_severity": 5
+  },
+  {
+    "explanation": "MusicPlayer and AdvancedAudioDevice are fat interfaces bundling unrelated concerns. Several implementations throw UnsupportedOperationException for non-applicable methods (e.g., VinylPlayer, Amplifier, BluetoothSpeaker). Clients must depend on operations they don’t need, and implementers are forced to stub or throw, indicating a strong ISP violation.",
+    "adherence_score": 1,
+    "violation_severity": 5
+  },
+  {
+    "explanation": "Vehicle, Operator, and EnergySystem bundle unrelated behaviors (flying, diving, diverse fuel types). Implementations frequently throw UnsupportedOperationException or rely on runtime checks based on energyType or role. Both machines and human operators are forced to depend on non-applicable members, demonstrating a severe ISP violation.",
+    "adherence_score": 1,
+    "violation_severity": 5
+  },
+  {
+    "explanation": "GameCharacter and Weapon are oversized: classes frequently throw UnsupportedOperationException for non-capabilities (e.g., Mage melee, Fighter magic/fly, Sword shoot, Bow slash/enchant). Consumers and implementers are forced to depend on methods irrelevant to them, violating the Interface Segregation Principle.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "A single MusicPlayer interface forces unrelated playback, media, and configuration concerns. VinylPlayer and Amplifier must implement irrelevant methods and often throw exceptions. Implementations and clients depend on non-essential members, indicating a clear ISP violation.",
+    "adherence_score": 1,
+    "violation_severity": 5
+  },
+  {
+    "explanation": "RestaurantWorker and MachineWorker are broad interfaces bundling unrelated responsibilities. Implementations either perform irrelevant actions or print that they don’t, revealing they were forced to depend on methods they don’t need. Contracts should be split by role capability; as written, this violates ISP.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Bird prescribes flight behaviors for all subtypes, yet Emperor (a penguin) cannot fly and raises NotImplementedError. AdvancedFlightManager accepts Bird and invokes perform_flight, so substituting Emperor breaks the expected contract at runtime. Capability mismatch (flight vs swim) indicates a clear LSP violation.",
+    "adherence_score": 2,
+    "violation_severity": 5
+  },
+  {
+    "explanation": "Base processor imposes no amount constraint, but CashProcessor strengthens the precondition by rejecting amounts over $1000 via exception. Code written against PaymentProcessor that succeeds for the base may fail when a CashProcessor is substituted, violating LSP. CreditCardProcessor remains permissive.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Superclass accepts any amount, but CashProcessor introduces a new constraint (≤ $1000) by raising an exception for larger values. Substituting CashProcessor where a PaymentProcessor is expected can break client assumptions, violating LSP. CreditCardProcessor does not add stricter preconditions.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The abstract base declares generic operations without constraints, but subclasses introduce differing preconditions (e.g., bank transfer minimum $100, wallet balance checks) and exceptions/delays. Clients depending on PaymentProcessor cannot rely on consistent admissible inputs or behavior across subtypes, undermining substitutability.",
+    "adherence_score": 3,
+    "violation_severity": 3
+  },
+  {
+    "explanation": "The abstract base states general operations, but subtypes impose different preconditions (bank transfer minimum $100, wallet must have sufficient balance) and raise distinct exceptions. Clients using PaymentProcessor cannot count on uniform admissible inputs across implementations.",
+    "adherence_score": 2,
+    "violation_severity": 3
+  },
+  {
+    "explanation": "Behavior is scattered across many switch statements on enums (CharacterType, WeaponType, PetType) in calculators and systems. Adding a new role, weapon, or pet requires editing multiple classes and branches. Logic isn’t delegated to polymorphic types, so the model isn’t closed for modification and changes are brittle.",
+    "adherence_score": 1,
+    "violation_severity": 5
+  },
+  {
+    "explanation": "Although shapes have a hierarchy, behavior sits in MetricCalculator, ShapeExporter, and ShapeFactory via switches and casts on ShapeKind. Adding a new shape requires modifying several switch statements. Responsibilities aren’t pushed into polymorphic methods, so the design isn’t closed to modification.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "DamageCalculator and LootCalculator switch on CharacterType, duplicating branching logic. To add a new character class, multiple calculators must be edited, and default branches throw exceptions. Behavior isn’t encapsulated by polymorphic characters, so the design is not closed to modification.",
+    "adherence_score": 1,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Nearly every subsystem (pricing, tax, nutrition, promotions, routing, inventory, chef, waiter) switches on FoodType (and often Size). Introducing a new food type requires edits across many classes, duplicating decision logic. The system isn’t closed to modification and is prone to inconsistent updates.",
+    "adherence_score": 1,
+    "violation_severity": 5
+  },
+  {
+    "explanation": "Controller and multiple services rely on large switch statements over DeviceType for behavior (on/off, modes, notifications, diagnostics, security, voice, scenes). Adding a device requires edits across many classes. Behavior isn’t encapsulated per device, so the system isn’t closed for modification.",
+    "adherence_score": 2,
+    "violation_severity": 5
+  },
+  {
+    "explanation": "Employee aggregates payroll calculation, taxes, bonus, performance reviews, vacation handling, reporting, ID generation, and coordination with HR/notifications. It mixes domain state, business rules, persistence-style updates, and presentation in one class with concrete dependencies and side effects. This strongly violates SRP, increases coupling, and hinders testing and extension.",
+    "adherence_score": 1,
+    "violation_severity": 5
+  },
+  {
+    "explanation": "Book handles persistence, formatting, validation, sales logging, royalty calculation, reporting, and printing in addition to modeling book data. It couples to infrastructure, performs I/O, maintains derived metrics, and exposes many unrelated behaviors. This breaks SRP and DIP, reducing cohesion and testability; these responsibilities belong in dedicated services and repositories.",
+    "adherence_score": 1,
+    "violation_severity": 5
+  },
+  {
+    "explanation": "Product constructs infrastructure (database, notifications), handles discounts, shipping, profit margins, sales processing, restocking, reporting, display, and review aggregation. It mixes domain state with orchestration, I/O side effects, pricing logic, and logging. Tight coupling and concrete dependencies violate SRP and DIP; embedded alerts/logging hinder OCP. Hard to unit test or extend.",
+    "adherence_score": 1,
+    "violation_severity": 5
+  },
+  {
+    "explanation": "User entity also saves itself and sends emails, mixing domain data with persistence and messaging concerns. This violates SRP and DIP; direct side effects and infrastructure knowledge hinder testing and reuse. These responsibilities should live in repository and email services.",
+    "adherence_score": 2,
+    "violation_severity": 3
+  },
+  {
+    "explanation": "Employee both computes salary and prints to the console. Combining business logic with presentation violates SRP but is limited in scope. Extract printing to a separate service to improve cohesion and testability; the data model itself remains focused.",
+    "adherence_score": 3,
+    "violation_severity": 2
+  },
+  {
+    "explanation": "This Java example violates the Dependency Inversion Principle because EmailService depends directly on the concrete MySQLDatabase class instead of an abstraction, making it tightly coupled to one database type.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "This Python version breaks the Dependency Inversion Principle by hard-coding EmailService to instantiate MySQLDatabase, coupling high-level behavior to one database implementation.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "This Java design violates the Dependency Inversion Principle because EmailService depends directly on the MySQLDatabase class and controls its lifecycle, making the service tightly bound to a specific data layer.",
+    "adherence_score": 1,
+    "violation_severity": 5
+  },
+  {
+    "explanation": "This Python example breaks the Dependency Inversion Principle because EmailService constructs a concrete MySQLDatabase internally, creating rigid coupling between layers.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The advanced Java implementation violates the Dependency Inversion Principle by coupling EmailService to a concrete MySQLDatabase implementation with detailed connection, pooling, and thread-management logic.",
+    "adherence_score": 1,
+    "violation_severity": 5
+  },
+  {
+    "explanation": "This code violates the Interface Segregation Principle because both Mage and Fighter are forced to implement unrelated methods, leading to UnsupportedOperationException for actions they cannot perform.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The MusicPlayer interface violates ISP because VinylPlayer must implement skipTrack() and eject(), which are meaningless for a turntable, forcing exception-throwing methods.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The RestaurantWorker interface breaks ISP because roles like Chef, Waiter, and Cleaner are forced to implement unrelated duties such as cooking, serving, and cleaning regardless of relevance.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "This code violates the Interface Segregation Principle because the Vehicle interface forces all implementers, including Car, to implement fly(), even though not all vehicles can fly.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "This design violates the Interface Segregation Principle by defining large, multi-purpose interfaces (GameCharacter, Weapon, Enemy) that force classes to implement many irrelevant methods, often resulting in UnsupportedOperationException or meaningless stubs.",
+    "adherence_score": 1,
+    "violation_severity": 5
+  },
+  {
+    "explanation": "This implementation violates the Liskov Substitution Principle because Penguin overrides the fly method to throw an UnsupportedOperationException, breaking expected behavior when Bird references are used.",
+    "adherence_score": 2,
+    "violation_severity": 5
+  },
+  {
+    "explanation": "This Python version violates LSP because Penguin overrides fly() by raising a NotImplementedError, making it incompatible with Bird references that expect flying capability.",
+    "adherence_score": 2,
+    "violation_severity": 5
+  },
+  {
+    "explanation": "The Ostrich subclass violates LSP because it overrides fly() to throw an UnsupportedOperationException, breaking expectations for clients using Bird references.",
+    "adherence_score": 2,
+    "violation_severity": 5
+  },
+  {
+    "explanation": "This Python hierarchy violates LSP because the Ostrich subclass raises NotImplementedError in fly(), causing runtime errors when used as a Bird that is expected to fly.",
+    "adherence_score": 2,
+    "violation_severity": 5
+  },
+  {
+    "explanation": "This complex Java design violates LSP because the Emperor class overrides flight-related methods by throwing UnsupportedOperationException, breaking the expected behavior of Bird subclasses in AdvancedFlightManager.",
+    "adherence_score": 1,
+    "violation_severity": 5
+  },
+  {
+    "explanation": "AreaCalculator violates OCP because it uses explicit if–else checks for each Shape subtype. Whenever a new Shape like Triangle or Polygon is added, the method must be changed.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "DamageCalculator violates OCP because it uses a switch on CharacterType. Adding new characters like Assassin or Healer means modifying this switch block.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "PriceCalculator violates OCP by hard-coding prices inside a switch on FoodType. Adding new items like Salad or Dessert forces direct modification.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "SmartHomeController breaks OCP by using switch statements to handle each DeviceType explicitly. Adding a new device like Camera or Speaker forces controller changes.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The ShapeReport and related classes violate OCP because they use nested switch statements on ShapeKind and Metric across multiple components. Every new shape or metric requires editing many files.",
+    "adherence_score": 1,
+    "violation_severity": 5
+  },
+  {
+    "explanation": "The User class violates SRP because it handles both data persistence and email communication, combining two unrelated responsibilities.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The Employee class violates SRP by handling both salary computation and payslip display logic, merging business and presentation responsibilities.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The Book class violates SRP by including both printing and file-saving responsibilities, mixing content representation and I/O operations.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The Product class mixes pricing logic with UI display methods, breaking SRP by combining computation and visualization responsibilities.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "This User class violates SRP by combining database management, email communication, validation, authentication, and account logic within one class.",
+    "adherence_score": 1,
+    "violation_severity": 5
+  }
+]

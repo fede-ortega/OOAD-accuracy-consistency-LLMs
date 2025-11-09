@@ -30,14 +30,14 @@ conda activate ooad-acc
 pip install -r requirements.txt
 ```
 
-### Getting an API Key
+### Getting an API Key
 
 For this framework, we will use an open LLM: Llama-4-Maverick-17B-128E-Instruct-FP8
 
 In order to obtain your API key, please visit the [llama.developer.meta.com](https://llama.developer.meta.com/). Take into account that API Keys can take some days to generate.
 Once you have this, fill the .env file with your API key in quotes.
 
-You should be all set yo evaluate your code!
+You should be all set to evaluate your code!
 
 # 2. How to run each module from the CLI
 
@@ -81,32 +81,32 @@ In case you also have an annotated JSON file that needs preprocessing, you can r
 python extract_json_values.py --in your_dataset.json --out your_outpu_file.txt --pretty
 ```
 
-This will create a .txt file in your directory that now can be compared with your LLM responses.
+This will create a .txt file in your directory that now can be compared with your LLM responses. In our case, it is **human_annotations_results**, you can also work with that as an example.
 
 # 4. Evaluating Accuracy of LLM's responses
 
-Now that we have two .txt files we are ready to evaluate. We will use Spearman and Pearson correlation, which work well for this Likert scale task of giving a score between 1-5. We can conduct an evaluation on two variables: adherence_score and violation_severity
+Now that we have two .txt files (human_annotations_results.txt & LLM_results.txt) we are ready to evaluate. 
+
+We will use Spearman and Pearson correlation, which work well for this Likert scale task of giving a score between 1-5. We can conduct an evaluation on two variables: adherence_score and violation_severity
 
 To evaluate adherence score, run the following code:
 ```src
-python spearman_correlation_from_txt.py \
-  --file-a results_a.txt \
-  --file-b results_b.txt \
-  --out-fig correlation.png \
+python spearman_pearson_correlation_from_txt.py \
+  --file-a human_annotations.txt \
+  --file-b llm_annotations.txt \
   --metric adherence_score \
+  --out-fig agreement_adherence.png \
   --pretty
 ````
 
 To evaluate violation_severity, run the following code:
 ```src
-python spearman_correlation_from_txt.py \
-  --file-a results_a.txt \
-  --file-b results_b.txt \
+python spearman_pearson_correlation_from_txt.py \
+  --file-a human_annotations.txt \
+  --file-b llm_annotations.txt \
   --metric violation_severity \
-  --out-fig correlation_vs.png \
+  --out-fig agreement_severity.png \
   --pretty
 ```
 
-You will get a figure with the results. Bear in mind that you will need a moderate number of annotations to measure how well it captures accuracy.
-
-
+You will get a figure with the results in a matrix format. Bear in mind that you will need a moderate number of annotations to measure how well it captures accuracy.

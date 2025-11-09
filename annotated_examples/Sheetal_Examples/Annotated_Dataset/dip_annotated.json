@@ -7,8 +7,8 @@
       "language": "JAVA",
       "violation": "DIP",
       "explanation": "This Java example violates the Dependency Inversion Principle because EmailService depends directly on the concrete MySQLDatabase class instead of an abstraction, making it tightly coupled to one database type.",
-      "adherence score": 2,
-      "violation severity": 4
+      "adherence_score": 2,
+      "violation_severity": 4
 
     },
     {
@@ -17,9 +17,9 @@
       "level": "EASY",
       "language": "PYTHON",
       "violation": "DIP",
-               "explanation": "This Python version breaks the Dependency Inversion Principle by hard-coding EmailService to instantiate MySQLDatabase, coupling high-level behavior to one database implementation.",
-          "adherence score": 2,
-          "violation severity": 4
+      "explanation": "This Python version breaks the Dependency Inversion Principle by hard-coding EmailService to instantiate MySQLDatabase, coupling high-level behavior to one database implementation.",
+      "adherence_score": 2,
+      "violation_severity": 4
 
     },
  {
@@ -29,8 +29,8 @@
       "language": "JAVA",
       "violation": "DIP",
       "explanation": "This Java design violates the Dependency Inversion Principle because EmailService depends directly on the MySQLDatabase class and controls its lifecycle, making the service tightly bound to a specific data layer.",
-      "adherence score": 1,
-      "violation severity": 5
+      "adherence_score": 1,
+      "violation_severity": 5
 
     },
     {
@@ -40,8 +40,8 @@
       "language": "PYTHON",
       "violation": "DIP",
       "explanation": "This Python example breaks the Dependency Inversion Principle because EmailService constructs a concrete MySQLDatabase internally, creating rigid coupling between layers.",
-      "adherence score": 2,
-      "violation severity": 4
+      "adherence_score": 2,
+      "violation_severity": 4
 
     },
     {
@@ -51,9 +51,8 @@
       "language": "JAVA",
       "violation": "DIP",
       "explanation": "The advanced Java implementation violates the Dependency Inversion Principle by coupling EmailService to a concrete MySQLDatabase implementation with detailed connection, pooling, and thread-management logic.",
-      "adherence score": 1,
-      "violation severity": 5
-
+      "adherence_score": 1,
+      "violation_severity": 5
     }
   ]
 }

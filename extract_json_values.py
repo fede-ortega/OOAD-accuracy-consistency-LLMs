@@ -1,26 +1,14 @@
-
 """
-extract_scores_to_txt.py
-
 Converts a JSON file with structure:
 {
   "code_examples": [ { "input": "...", "output": "...", "explanation": "...",
                        "adherence_score": 2, "violation_severity": 4, ... }, ... ]
 }
 
-into a TXT file containing ONLY a JSON array of objects with:
+Returns a TXT file containing ONLY a JSON array of objects with:
   - explanation
   - adherence_score
   - violation_severity
-
-Robustness:
-- Accepts key variants: "adherence score", "adherance_score", "violation severity"
-  (case-insensitive; underscores/spaces ignored)
-- Coerces scores to integers in [1..5] when possible; otherwise null
-- Leaves "explanation" as-is
-
-Usage:
-  python extract_scores_to_txt.py --in data.json --out results.txt --pretty
 """
 
 import argparse

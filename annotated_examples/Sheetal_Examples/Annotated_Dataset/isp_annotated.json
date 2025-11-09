@@ -7,8 +7,8 @@
       "language": "JAVA",
       "violation": "ISP",
       "explanation": "This code violates the Interface Segregation Principle because both Mage and Fighter are forced to implement unrelated methods, leading to UnsupportedOperationException for actions they cannot perform.",
-      "adherence score": 2,
-      "violation severity": 4
+      "adherence_score": 2,
+      "violation_severity": 4
     },
     {
       "input": "interface MusicPlayer {\n    void play();\n    void pause();\n    void stop();\n    void skipTrack();\n    void eject();\n}\n\nclass CDPlayer implements MusicPlayer {\n    private boolean isPlaying = false;\n    private boolean isPaused = false;\n    private String currentTrack = \"Track 1\";\n    \n    @Override\n    public void play() {\n        isPlaying = true;\n        isPaused = false;\n        System.out.println(\"CD Player: Playing \" + currentTrack);\n    }\n    \n    @Override\n    public void pause() {\n        if (isPlaying) {\n            isPaused = true;\n            isPlaying = false;\n            System.out.println(\"CD Player: Paused\");\n        }\n    }\n    \n    @Override\n    public void stop() {\n        isPlaying = false;\n        isPaused = false;\n        System.out.println(\"CD Player: Stopped\");\n    }\n    \n    @Override\n    public void skipTrack() {\n        System.out.println(\"CD Player: Skipping to next track\");\n        currentTrack = \"Track \" + (Integer.parseInt(currentTrack.split(\" \")[1]) + 1);\n    }\n    \n    @Override\n    public void eject() {\n        stop();\n        System.out.println(\"CD Player: CD ejected\");\n    }\n}\n\nclass VinylPlayer implements MusicPlayer {\n    private boolean isPlaying = false;\n    private boolean isPaused = false;\n    private String currentSong = \"Side A\";\n    \n    @Override\n    public void play() {\n        isPlaying = true;\n        isPaused = false;\n        System.out.println(\"Vinyl Player: Playing \" + currentSong);\n    }\n    \n    @Override\n    public void pause() {\n        if (isPlaying) {\n            isPaused = true;\n            isPlaying = false;\n            System.out.println(\"Vinyl Player: Paused (needle lifted)\");\n        }\n    }\n    \n    @Override\n    public void stop() {\n        isPlaying = false;\n        isPaused = false;\n        System.out.println(\"Vinyl Player: Stopped\");\n    }\n    \n    @Override\n    public void skipTrack() {\n        throw new UnsupportedOperationException(\"Vinyl players cannot skip tracks - you must manually move the needle!\");\n    }\n   \n    @Override\n    public void eject() {\n        throw new UnsupportedOperationException(\"Vinyl players don't eject - you must manually remove the record!\");\n    }\n}\n",
@@ -17,8 +17,8 @@
       "language": "JAVA",
       "violation": "ISP",
       "explanation": "The MusicPlayer interface violates ISP because VinylPlayer must implement skipTrack() and eject(), which are meaningless for a turntable, forcing exception-throwing methods.",
-      "adherence score": 2,
-      "violation severity": 4
+      "adherence_score": 2,
+      "violation_severity": 4
     },
     {
       "input": "interface RestaurantWorker {\n    void cookFood();\n    void serveCustomers();\n    void cleanTables();\n}\n\nclass Chef implements RestaurantWorker {\n    public void cookFood() {\n        System.out.println(\"Chef is cooking food.\");\n    }\n\n    public void serveCustomers() {\n        System.out.println(\"Chef does not serve customers.\");\n    }\n\n    public void cleanTables() {\n        System.out.println(\"Chef does not clean tables.\");\n    }\n}\n\nclass Waiter implements RestaurantWorker {\n    public void cookFood() {\n        System.out.println(\"Waiter does not cook food.\");\n    }\n\n    public void serveCustomers() {\n        System.out.println(\"Waiter is serving customers.\");\n    }\n\n    public void cleanTables() {\n        System.out.println(\"Waiter is cleaning tables.\");\n    }\n}\n\nclass Cleaner implements RestaurantWorker {\n    public void cookFood() {\n        System.out.println(\"Cleaner does not cook food.\");\n    }\n\n    public void serveCustomers() {\n        System.out.println(\"Cleaner does not serve customers.\");\n    }\n\n    public void cleanTables() {\n        System.out.println(\"Cleaner is cleaning tables.\");\n    }\n}\n",
@@ -27,19 +27,19 @@
       "language": "JAVA",
       "violation": "ISP",
       "explanation": "The RestaurantWorker interface breaks ISP because roles like Chef, Waiter, and Cleaner are forced to implement unrelated duties such as cooking, serving, and cleaning regardless of relevance.",
-      "adherence score": 2,
-      "violation severity": 4
+      "adherence_score": 2,
+      "violation_severity": 4
  
     },
     {
       "input": "interface Vehicle {\n    void start();\n    void stop();\n    void fly();\n}\n\nclass Car implements Vehicle {\n    public void start() {\n        System.out.println(\"Car engine started\");\n    }\n    \n    public void stop() {\n        System.out.println(\"Car stopped\");\n    }\n    \n    public void fly() {\n        throw new UnsupportedOperationException(\"Car cannot fly\");\n    }\n}\n\nclass Plane implements Vehicle {\n    public void start() {\n        System.out.println(\"Plane engines started\");\n    }\n    \n    public void stop() {\n        System.out.println(\"Plane stopped\");\n    }\n    \n    public void fly() {\n        System.out.println(\"Plane is flying\");\n    }\n}\n",
       "output": "interface Vehicle {\n    void start();\n    void stop();\n}\n\ninterface IPlane {\n    void fly();\n}\n\nclass Car implements Vehicle {\n    public void start() {\n        System.out.println(\"Car engine started\");\n    }\n    \n    public void stop() {\n        System.out.println(\"Car stopped\");\n    }\n    \n}\n\nclass Plane implements Vehicle, IPlane {\n    public void start() {\n        System.out.println(\"Plane engines started\");\n    }\n    \n    public void stop() {\n        System.out.println(\"Plane stopped\");\n    }\n    \n    public void fly() {\n        System.out.println(\"Plane is flying\");\n    }\n}\n",
-  "level": "EASY",
-  "language": "JAVA",
-  "violation": "ISP",
-    "explanation": "This code violates the Interface Segregation Principle because the Vehicle interface forces all implementers, including Car, to implement fly(), even though not all vehicles can fly.",
-  "adherence score": 2,
-      "violation severity": 4
+      "level": "EASY",
+      "language": "JAVA",
+      "violation": "ISP",
+      "explanation": "This code violates the Interface Segregation Principle because the Vehicle interface forces all implementers, including Car, to implement fly(), even though not all vehicles can fly.",
+      "adherence_score": 2,
+      "violation_severity": 4
 
 },
      {
@@ -49,9 +49,8 @@
       "language": "JAVA",
       "violation": "ISP",
       "explanation": "This design violates the Interface Segregation Principle by defining large, multi-purpose interfaces (GameCharacter, Weapon, Enemy) that force classes to implement many irrelevant methods, often resulting in UnsupportedOperationException or meaningless stubs.",
-          "adherence score": 1,
-          "violation severity": 5
-
+      "adherence_score": 1,
+      "violation_severity": 5
     }
   ]
 }

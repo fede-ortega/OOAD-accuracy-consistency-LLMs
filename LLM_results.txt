@@ -1,0 +1,252 @@
+[
+  {
+    "explanation": "Tight coupling between EmailService and MySQLDatabase, EmailService directly instantiates MySQLDatabase. MySQLDatabase has multiple responsibilities: connection management and data access. Magic numbers and hardcoded values are present.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Tight coupling between PaymentProcessor and PayPalGateway; PaymentProcessor is not open for extension. Violates SRP and DIP.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Tight coupling between PaymentProcessor and PayPalGateway; PaymentProcessor is not open for extension without modification.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Tight coupling and SRP violation in PaymentProcessor. Hard-coded dependencies and gateway-specific logic.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Tight coupling and SRP violation in PaymentProcessor. Different gateways have different methods. Magic strings used for gateway selection.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+{
+    "explanation": "The code violates ISP and LSP due to interfaces being too broad and implementations throwing UnsupportedOperationException. SRP is mostly adhered to, but some classes have multiple responsibilities.",
+    "adherence_score": 3,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The code violates SRP and ISP due to fat interfaces (Vehicle, EnergySystem, Operator) and leaky abstractions. Classes like Car, Plane, and Submarine implement methods they don't need, throwing UnsupportedOperationException. Tight coupling is seen between vehicle classes and their operators.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The code violates SRP and ISP as GameCharacter and Weapon interfaces have methods not applicable to all implementors. Tight coupling is seen between character abilities and their implementations. Magic numbers are used throughout the code.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The MusicPlayer interface is too broad, causing implementing classes to throw UnsupportedOperationException. This violates ISP and SRP. Classes have varying levels of adherence to the interface, showing a leaky abstraction.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The code violates ISP as RestaurantWorker and MachineWorker interfaces have methods not applicable to all implementors. SRP is also violated as some classes have multiple, unrelated responsibilities. However, classes are generally well-structured and follow single implementation.",
+    "adherence_score": 3,
+    "violation_severity": 4
+  },
+{
+    "explanation": "The code adheres well to SOLID principles. Abstraction is achieved through the Bird abstract class. Each bird type implements its specific flight behavior. The AdvancedFlightManager class manages a flock of birds without knowing their concrete types, demonstrating good dependency inversion. However, the Emperor class, being flightless, slightly violates LSP by implementing flight methods.",
+    "adherence_score": 4,
+    "violation_severity": 2
+  },
+  {
+    "explanation": "Violates SRP and LSP due to varying payment rules in subclasses. Tight coupling through inheritance. Magic number (1000) in CashProcessor.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The code demonstrates good abstraction and inheritance. However, it violates SRP and has tight coupling due to hardcoded logic and magic numbers. CashProcessor has a conditional check that could be abstracted.",
+    "adherence_score": 3,
+    "violation_severity": 3
+  },
+  {
+    "explanation": "The code adheres to SOLID principles with some issues. SRP is mostly followed, but `validatePayment` has varying logic. LSP is maintained through abstract class inheritance. ISP is not an issue as there's a single abstract class. DIP is partially followed, but some classes have tight coupling with specific payment logic and magic numbers.",
+    "adherence_score": 4,
+    "violation_severity": 3
+  },
+  {
+    "explanation": "The code adheres to SOLID principles with abstractions and polymorphism. However, it has tight coupling due to hard-coded validation rules and magic numbers. The `BankTransferProcessor` and `DigitalWalletProcessor` classes have different minimum transfer amounts.",
+    "adherence_score": 4,
+    "violation_severity": 3
+  },
+{
+    "explanation": "Tight coupling and SRP violations are evident. Multiple classes depend on specific enums and have complex conditionals. PetBoostSystem and WeaponRuleSet have similar switch statements, indicating a potential abstraction issue. DamageCalculator and HealCalculator have dependencies on other classes.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Violates SRP and OCP due to switch statements in MetricCalculator and ShapeExporter. Tight coupling between Shape subclasses and these classes. ShapeFactory has a large method with complex parsing logic.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Tight coupling and SRP violations in DamageCalculator and LootCalculator due to switch statements on CharacterType. Magic numbers used throughout. Leaky abstractions as character type specific logic is exposed.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The code has multiple SRP violations and tight coupling due to duplicated dependencies and switch statements. Classes like PriceCalculator, TaxCalculator, and NutritionCalculator have similar structures, indicating a potential abstraction. The use of enums and switch statements may limit extensibility.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Tight coupling and SRP violations in SmartHomeController, NotificationService, DiagnosticsService, SecurityPolicy, VoiceCommandProcessor, SceneManager, and EnergyEstimator due to extensive switch statements on DeviceType. This leads to rigid and fragile code.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+{
+    "explanation": "Tight coupling and SRP violations: Employee class depends on HRSystem and NotificationService, and handles multiple responsibilities like payroll, vacation, and performance review.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Tight coupling between Book and FileStorage, Book has multiple responsibilities, and hard-coded dependencies.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The Product class has multiple responsibilities and is tightly coupled with InventoryDatabase and NotificationService. It violates SRP and DIP. Hard-coded dependencies and magic numbers are present.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The User class violates SRP by handling both data persistence and email sending. It tightly couples business logic with infrastructure concerns.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The Employee class violates SRP by handling both salary calculation and pay slip printing. It also has a rigid salary calculation formula. Tight coupling exists between salary calculation and years of service.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+{
+    "explanation": "Tight coupling between EmailService and MySQLDatabase; EmailService instantiates MySQLDatabase directly, violating DIP. MySQLDatabase is not an abstraction, making it hard to switch databases.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Tight coupling between EmailService and MySQLDatabase; EmailService is not open for extension. MySQLDatabase is not an abstraction.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Tight coupling between EmailService and MySQLDatabase, hardcoded database connection, and leaky abstraction in MySQLDatabase's getUserEmail and validateUser methods.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Tight coupling between EmailService and MySQLDatabase, hardcoded database connection in EmailService, and SRP violation in MySQLDatabase (mixing connection management and business logic).",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Tight coupling between EmailService and MySQLDatabase, leaky abstraction in MySQLDatabase, and SRP violations in EmailService. MySQLDatabase simulates database operations but lacks actual database interaction, violating the abstraction principle.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+{
+    "explanation": "The GameCharacter interface is not segregated, forcing Mage and Fighter to implement methods they don't support, violating ISP and SRP. Tight coupling between character abilities and the GameCharacter interface is evident.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The code adheres to SRP and ISP through the MusicPlayer interface, but VinylPlayer violates LSP by throwing UnsupportedOperationException for skipTrack and eject. This indicates a design issue where not all MusicPlayers can perform all actions.",
+    "adherence_score": 3,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The code violates ISP and SRP as RestaurantWorker interface forces unrelated methods on implementors. Chef, Waiter, and Cleaner implement methods they don't need, showing tight coupling and leaky abstraction.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The Vehicle interface is not segregated, forcing Car to implement fly(), violating ISP. Car and Plane have different implementations, indicating a potential SRP issue. Plane and Car are tightly coupled to the Vehicle interface.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The code violates SRP and ISP due to fat interfaces and tight coupling. GameCharacter and Enemy interfaces have methods not applicable to all implementors, leading to UnsupportedOperationExceptions. Abstractions are leaky, and dependencies are not inverted.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+{
+    "explanation": "Penguin extends Bird but cannot fly, violating LSP. BirdWatcher is tightly coupled to Bird's fly method.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Penguin's fly method raises NotImplementedError, violating LSP. BirdWatcher is tightly coupled to Bird's fly method.",
+    "adherence_score": 3,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The code has a mix of good and bad design. The Bird hierarchy is mostly good, but Ostrich violates LSP by throwing an exception in fly(). FlightSimulator is generally good, but assumes all birds can fly, which is not true for Ostrich.",
+    "adherence_score": 3,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The code has mixed adherence. It uses abstraction and polymorphism well, but Ostrich class violates LSP by throwing NotImplementedError. FlightSimulator tightly couples with Bird, but is somewhat mitigated by abstraction.",
+    "adherence_score": 3,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The code generally adheres to SOLID principles, with good abstraction and encapsulation. However, the Emperor class violates LSP by throwing UnsupportedOperationException, indicating a design flaw. The Bird class has a broad interface, potentially violating ISP. AdvancedFlightManager tightly couples with Bird, but uses abstraction.",
+    "adherence_score": 4,
+    "violation_severity": 3
+  },
+{
+    "explanation": "Violates SRP and OCP due to type checking and casting in AreaCalculator. Tight coupling between AreaCalculator and shape types.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Tight coupling between DamageCalculator and GameCharacter; SRP violation in DamageCalculator due to type-based logic; leaky abstraction with CharacterType enum exposure.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Tight coupling and SRP violation in PriceCalculator due to hardcoded prices and types. Order class is simple and adherent.",
+    "adherence_score": 3,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Violates SRP and OCP due to switch statements in SmartHomeController. Tight coupling between controller and device types. Magic numbers used for energy calculations.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The code violates OCP and SRP due to extensive use of switch statements and casting in various classes. Tight coupling is observed between classes like MetricCalculator, ShapeValidator, and ShapeRenderer with Shape subclasses. The ShapeReport class has multiple dependencies, indicating a potential SRP violation.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+{
+    "explanation": "Violates SRP by mixing data storage and email sending responsibilities. Tight coupling to database and email systems.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Violates SRP by mixing salary calculation and pay slip printing. Tight coupling to System.out.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Violates SRP by mixing data and output concerns. 'printBook' and 'saveToFile' should be separate classes. 'saveToFile' is not implemented, indicating incomplete functionality.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "The Product class has multiple responsibilities (data storage, discount calculation, and display), violating SRP. It also tightly couples with System.out for display, and uses a magic number in applyDiscount.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  },
+  {
+    "explanation": "Tight coupling and SRP violations: User class depends on DatabaseHelper and EmailHelper. It also handles password hashing, validation, and account locking.",
+    "adherence_score": 2,
+    "violation_severity": 4
+  }
+]

@@ -1,24 +1,27 @@
-
 """
-Reads two TXT files that each contain a JSON array like:
-[
-  {"explanation":"...", "adherence_score":1, "violation_severity":4},
-  ...
-]
+Reads two TXT files that each contain either:
+  a JSON array like: [{"explanation":"...", "adherence_score":1, "violation_severity":4}, ...]
+  OR JSON-lines (one object per line)
 
 Aligns entries by index, extracts a metric (default: adherence_score),
-computes both Spearman (rank) and Pearson (linear) correlations, and saves
-a scatter plot with a y=x reference line. 
+computes Spearman (rank) and Pearson (linear) correlations,
+and saves a 5×5 agreement matrix (Likert 1–5).
+
+Axis mapping:
+  X = Human Annotations  (file_a)
+  Y = LLM's Annotations  (file_b)
 """
 
 import argparse
 import json
 import sys
 from typing import Any, List, Tuple
+import math
 
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import numpy as np
 
 try:
     from scipy.stats import spearmanr, pearsonr
@@ -28,15 +31,41 @@ except Exception:
 
 VALID_METRICS = {"adherence_score", "violation_severity"}
 
+
 def _load_list(path: str) -> List[dict]:
+    """
+    Accepts .txt files that contain either a JSON array or JSON-lines.
+    Returns a list of dicts.
+    """
     try:
         with open(path, "r", encoding="utf-8") as f:
-            data = json.load(f)
+            text = f.read().strip()
     except Exception as e:
-        sys.exit(f"ERROR: Could not read JSON array from {path}: {e}")
-    if not isinstance(data, list):
-        sys.exit(f"ERROR: {path} does not contain a JSON array at the top level.")
-    return [x for x in data if isinstance(x, dict)]
+        sys.exit(f"ERROR: Could not read {path}: {e}")
+
+    try:
+        data = json.loads(text)
+        if isinstance(data, list):
+            return [x for x in data if isinstance(x, dict)]
+    except Exception:
+        pass
+
+    items: List[dict] = []
+    for ln in text.splitlines():
+        ln = ln.strip()
+        if not ln:
+            continue
+        try:
+            obj = json.loads(ln)
+            if isinstance(obj, dict):
+                items.append(obj)
+        except Exception:
+            # ignore non-JSON lines
+            continue
+
+    if not items:
+        sys.exit(f"ERROR: {path} did not contain a JSON array or JSON-lines of objects.")
+    return items
 
 def _coerce_num(v: Any):
     if v is None:
@@ -50,10 +79,7 @@ def _coerce_num(v: Any):
             return None
 
 def _extract_metric(items: List[dict], metric: str) -> List[float]:
-    vals: List[float] = []
-    for obj in items:
-        vals.append(_coerce_num(obj.get(metric)))
-    return vals
+    return [_coerce_num(obj.get(metric)) for obj in items]
 
 def _paired(values_a: List[float], values_b: List[float]) -> Tuple[List[float], List[float], int]:
     n = min(len(values_a), len(values_b))
@@ -64,9 +90,10 @@ def _paired(values_a: List[float], values_b: List[float]) -> Tuple[List[float], 
         if a is None or b is None:
             dropped += 1
             continue
-        xs.append(a)
-        ys.append(b)
+        xs.append(a)  # Human annotations
+        ys.append(b)  # LLM's annotations
     return xs, ys, dropped
+
 
 def _corrs(xs: List[float], ys: List[float]):
     if not _HAVE_SCIPY:
@@ -77,35 +104,78 @@ def _corrs(xs: List[float], ys: List[float]):
     r_p, p_p = pearsonr(xs, ys)
     return float(r_s), float(p_s), float(r_p), float(p_p)
 
-def _plot(xs: List[float], ys: List[float], out_fig: str, r_s: float, r_p: float):
-    plt.figure(figsize=(6.4, 6.0))
-    plt.scatter(xs, ys)  # default style; no explicit colors
-    # Reference line y=x across the data range
+# Plot: 5×5 agreement matrix
+
+def _bins_from_integers(lo: float, hi: float):
+    """
+    Build edges centered on integers, e.g., 0.5..5.5 -> bins for 1..5.
+    """
+    start = math.floor(lo) - 0.5
+    end = math.ceil(hi) + 0.5
+    if end <= start:
+        end = start + 1.0
+    return np.arange(start, end + 1.0, 1.0)
+
+def _plot_matrix5(xs: List[float], ys: List[float], out_fig: str, r_s: float, r_p: float):
     if xs and ys:
         lo = min(min(xs), min(ys))
         hi = max(max(xs), max(ys))
     else:
-        lo, hi = 0, 1
-    pad = (hi - lo) * 0.05 if hi > lo else 1
-    lo -= pad
-    hi += pad
-    plt.plot([lo, hi], [lo, hi], linestyle='--')  
+        lo, hi = 1.0, 5.0
 
-    # Grid & labels to match the example vibe
-    plt.grid(True, linestyle=':', linewidth=1)
-    plt.xlabel("X")
-    plt.ylabel("Y")
-    plt.title(f"Spearman correlation={r_s:.2g}\nPearson correlation={r_p:.2g}")
+    lo = min(lo, 1.0)
+    hi = max(hi, 5.0)
+    xbins = _bins_from_integers(1.0, 5.0)
+    ybins = _bins_from_integers(1.0, 5.0)
+
+    xs_np = np.clip(np.asarray(xs, dtype=float), 1.0, 5.0)
+    ys_np = np.clip(np.asarray(ys, dtype=float), 1.0, 5.0)
+
+    M, _, _ = np.histogram2d(xs_np, ys_np, bins=[xbins, ybins])
+
+    plt.figure(figsize=(6.2, 5.8))
+
+    im = plt.imshow(
+        M.T,
+        origin="lower",
+        extent=[0.5, 5.5, 0.5, 5.5],
+        aspect="equal",
+        interpolation="nearest"
+    )
+
+    for i in range(5):
+        for j in range(5):
+            c = int(M[i, j])
+            if c:
+                plt.text(i + 1, j + 1, str(c), ha="center", va="center")
+
+    plt.xticks([1, 2, 3, 4, 5])
+    plt.yticks([1, 2, 3, 4, 5])
+    plt.xlabel("Human Annotations")     # X (file_a)
+    plt.ylabel("LLM's Annotations")     # Y (file_b)
+    plt.title(f"Agreement Matrix (1–5)\nSpearman={r_s:.2f}   Pearson={r_p:.2f}")
+    plt.colorbar(im, label="count")
+
+    ax = plt.gca()
+    ax.grid(False)                       
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+
     plt.tight_layout()
     plt.savefig(out_fig, dpi=180)
     plt.close()
 
+# CLI
+
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Compute Spearman & Pearson correlation between two TXT outputs (JSON arrays).")
-    parser.add_argument("--file-a", required=True, help="Path to first TXT/JSON array file.")
-    parser.add_argument("--file-b", required=True, help="Path to second TXT/JSON array file.")
-    parser.add_argument("--out-fig", default="correlation.png", help="Path to output figure file (PNG).")
-    parser.add_argument("--metric", default="adherence_score", choices=sorted(VALID_METRICS), help="Metric to correlate.")
+    parser = argparse.ArgumentParser(
+        description="Correlate Human (file_a) vs LLM (file_b) annotations and plot a 5×5 agreement matrix."
+    )
+    parser.add_argument("--file-a", required=True, help="Path to TXT with annotations by Human (JSON array or JSON-lines).")
+    parser.add_argument("--file-b", required=True, help="Path to TXT with annotations by LLM (JSON array or JSON-lines).")
+    parser.add_argument("--out-fig", default="agreement_matrix.png", help="Output PNG path.")
+    parser.add_argument("--metric", default="adherence_score", choices=sorted(VALID_METRICS),
+                        help="Metric to correlate (keys inside each JSON object).")
     parser.add_argument("--pretty", action="store_true", help="Print a detailed summary to stdout.")
     args = parser.parse_args()
 
@@ -117,11 +187,13 @@ def main() -> None:
     xs, ys, dropped = _paired(vals_a, vals_b)
 
     r_s, p_s, r_p, p_p = _corrs(xs, ys)
-    _plot(xs, ys, args.out_fig, r_s, r_p)
+    _plot_matrix5(xs, ys, args.out_fig, r_s, r_p)
 
     if args.pretty:
         print("=== Correlation summary ===")
         print(f"Metric: {args.metric}")
+        print("X = Human Annotations (file_a)")
+        print("Y = LLM's Annotations (file_b)")
         print(f"File A count: {len(vals_a)}  File B count: {len(vals_b)}  Paired used: {len(xs)}  Dropped: {dropped}")
         if len(xs) < 2:
             print("Not enough paired observations to compute correlations (need at least 2).")

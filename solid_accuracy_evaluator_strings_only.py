@@ -39,7 +39,7 @@ class AccuracyPromptTemplate:
 
     def build_system_prompt(self) -> str:
         return (
-            "You are a strict software design reviewer familiar with OOAD principles. "
+            "You are a strict software design reviewer familiar with OOAD principles. " 
             "Judge the provided code's adherence to SOLID principles with focus on ACCURACY: "
             "how well responsibilities, abstractions, and coupling in the code align with SOLID. "
             "Respond ONLY with valid JSON using the keys: "
@@ -56,7 +56,7 @@ class AccuracyPromptTemplate:
             "- violation_severity (1–5): 1=negligible; 2=low; 3=moderate; 4=high; 5=critical.\n\n"
             "Evaluate the following code for SOLID ACCURACY. "
             "Cite concrete issues (e.g., SRP violations, tight coupling, hard-coded deps, magic numbers, leaky abstractions). "
-            "If mixed, balance strengths and weaknesses. Return ONLY JSON."
+            "If mixed, balance strengths and weaknesses. Examine the provided examples in the system to make judgements. Return ONLY JSON."
         )
         schema_hint = (
             "Return JSON like:\n"
