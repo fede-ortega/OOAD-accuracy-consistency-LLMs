@@ -1,0 +1,802 @@
+[
+  {
+    "index": 0,
+    "labels": [
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 1,
+    "labels": [
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 2,
+    "labels": [
+      "OCP",
+      "OCP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP"
+    ],
+    "label_agreement": 0.5
+  },
+  {
+    "index": 3,
+    "labels": [
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 4,
+    "labels": [
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP"
+    ],
+    "label_agreement": 1.0
+  },
+{
+    "index": 0,
+    "labels": [
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 1,
+    "labels": [
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 2,
+    "labels": [
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 3,
+    "labels": [
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 4,
+    "labels": [
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP"
+    ],
+    "label_agreement": 1.0
+  },
+{
+    "index": 0,
+    "labels": [
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 1,
+    "labels": [
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "SRP",
+      "SRP",
+      "LSP",
+      "SRP"
+    ],
+    "label_agreement": 0.7
+  },
+  {
+    "index": 2,
+    "labels": [
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 3,
+    "labels": [
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 4,
+    "labels": [
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP"
+    ],
+    "label_agreement": 1.0
+  },
+{
+    "index": 0,
+    "labels": [
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP"
+    ],
+    "label_agreement": 0.5
+  },
+  {
+    "index": 1,
+    "labels": [
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 2,
+    "labels": [
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 3,
+    "labels": [
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 4,
+    "labels": [
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP"
+    ],
+    "label_agreement": 1.0
+  },
+{
+    "index": 0,
+    "labels": [
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 1,
+    "labels": [
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 2,
+    "labels": [
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 3,
+    "labels": [
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 4,
+    "labels": [
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP"
+    ],
+    "label_agreement": 1.0
+  },
+{
+    "index": 0,
+    "labels": [
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 1,
+    "labels": [
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 2,
+    "labels": [
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP",
+      "DIP"
+    ],
+    "label_agreement": 0.5
+  },
+  {
+    "index": 3,
+    "labels": [
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 4,
+    "labels": [
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP"
+    ],
+    "label_agreement": 1.0
+  },
+{
+    "index": 0,
+    "labels": [
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 1,
+    "labels": [
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 2,
+    "labels": [
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 3,
+    "labels": [
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 4,
+    "labels": [
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP",
+      "ISP"
+    ],
+    "label_agreement": 1.0
+  },
+{
+    "index": 0,
+    "labels": [
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 1,
+    "labels": [
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 2,
+    "labels": [
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 3,
+    "labels": [
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 4,
+    "labels": [
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP",
+      "LSP"
+    ],
+    "label_agreement": 1.0
+  },
+{
+    "index": 0,
+    "labels": [
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 1,
+    "labels": [
+      "OCP",
+      "SRP",
+      "SRP",
+      "OCP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "OCP",
+      "SRP"
+    ],
+    "label_agreement": 0.7
+  },
+  {
+    "index": 2,
+    "labels": [
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 3,
+    "labels": [
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 4,
+    "labels": [
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP",
+      "OCP"
+    ],
+    "label_agreement": 1.0
+  },
+{
+    "index": 0,
+    "labels": [
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 1,
+    "labels": [
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 2,
+    "labels": [
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 3,
+    "labels": [
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP"
+    ],
+    "label_agreement": 1.0
+  },
+  {
+    "index": 4,
+    "labels": [
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP",
+      "SRP"
+    ],
+    "label_agreement": 1.0
+  }
+]

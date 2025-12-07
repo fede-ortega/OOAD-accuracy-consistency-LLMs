@@ -7,6 +7,8 @@ Students:
 
 ---
 
+# DEPENDENCIES 
+
 # 1. Setting up a virtual environment
 
 ### Initial Considerations
@@ -38,6 +40,8 @@ In order to obtain your API key, please visit the [llama.developer.meta.com](htt
 Once you have this, fill the .env file with your API key in quotes.
 
 You should be all set to evaluate your code!
+
+# BUILD INSTRUCTIONS
 
 # 2. How to run each module from the CLI
 
@@ -110,3 +114,48 @@ python spearman_pearson_correlation_from_txt.py \
 ```
 
 You will get a figure with the results in a matrix format. Bear in mind that you will need a moderate number of annotations to measure how well it captures accuracy.
+
+# 5. Evaluating Consistency of LLM's Labels
+
+For this, we will need a txt. with our error in a dictionary where "input" is the key and the code snippet is the value.
+
+```src
+python consistency_label_eval.py \
+  --dataset snippets_example.txt \
+  --k [number of runs] \
+  --pretty
+```
+
+The output is a JSON array of objects like {"index": 0, "labels": [...], "label_agreement": 0.96} that is used by the downstream scripts.
+
+Now, if we want to get the average label-agreement, we have to paste all the evaluations in a new .txt file and run the following code:
+
+```src
+python label_agreement_stats.py consistency_k5.txt
+```
+
+For the evaluation of accuracy, precision, recall and F1 score between gold standard and LLM's annotations, run the following:
+
+```
+python3 ooad_label_evaluator.py \
+  gold_standard_labels.txt \
+  consistency_k5.txt \
+  confusion_matrix_k5.png
+```
+
+# TEST INSTRUCTIONS
+
+All tests were created with Pytest. Instructions on how to run them depend on IDE of choice.
+
+In VSCode, we can go to the last icon on the left and run all of them as in the following screenshot:
+
+![alt text](test_coverage.png)
+
+Bear in mind that tests are only to test the architecture, we don't test using the API Key. 
+
+Test coverage is the following:
+
+![alt text](test_coverage.png)
+
+
+

@@ -17,7 +17,7 @@ import json
 import re
 from typing import List, Union
 
-from solid_accuracy_evaluator_strings_only import (
+from adherence_violation_evaluation.solid_accuracy_evaluator_strings_only import (
     AccuracyPromptTemplate,
     LlamaJudgeClient,
     SolidAccuracyEvaluator,
