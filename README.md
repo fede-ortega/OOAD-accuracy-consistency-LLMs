@@ -149,7 +149,7 @@ All tests were created with Pytest. Instructions on how to run them depend on ID
 
 In VSCode, we can go to the last icon on the left and run all of them as in the following screenshot:
 
-![alt text](test_coverage.png)
+![alt text](test_show.png)
 
 Bear in mind that tests are only to test the architecture, we don't test using the API Key. 
 
